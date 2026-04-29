@@ -131,6 +131,7 @@
         let driveFileId = null; // ID of notes.json in Drive
         let syncTimeout = null;
         let editingNoteId = null; // Tracks which note is currently being edited
+        let hasPendingChanges = localStorage.getItem('notes_pending_sync') === 'true'; // Track unsynced offline changes
 
         // --- DOM Elements ---
         const loginBtn = document.getElementById('login-btn');
@@ -148,8 +149,37 @@
         const charCount = document.getElementById('char-count');
         const manualSyncBtn = document.getElementById('manual-sync-btn');
 
+        // --- Network Event Listeners ---
+        window.addEventListener('online', () => {
+            if (accessToken) {
+                if (hasPendingChanges) {
+                    saveNotesToDrive();
+                } else {
+                    fetchNotesFromDrive();
+                }
+            } else if (notesArray.length > 0) {
+                updateSyncStatus('synced'); // Just clear the offline error if unauthenticated
+            }
+        });
+
+        window.addEventListener('offline', () => {
+            updateSyncStatus('offline');
+            if (accessToken) {
+                showToast('You are offline. Notes will be saved locally.', 'info');
+            }
+        });
+
         // --- Initialization ---
         window.onload = function() {
+            // Load local backup instantly if available
+            const localBackup = localStorage.getItem('cloud_notes_backup');
+            if (localBackup) {
+                try {
+                    notesArray = JSON.parse(localBackup);
+                    renderNotes();
+                } catch(e) {}
+            }
+
             // Initialize Google Identity Services
             tokenClient = google.accounts.oauth2.initTokenClient({
                 client_id: CLIENT_ID,
@@ -182,6 +212,10 @@
             notesArray = [];
             driveFileId = null;
             editingNoteId = null;
+            hasPendingChanges = false;
+            localStorage.removeItem('cloud_notes_backup'); // Clear local data on explicit logout
+            localStorage.removeItem('notes_pending_sync');
+            
             hideAppUI();
             showToast('Logged out successfully', 'success');
         });
@@ -202,6 +236,10 @@
             welcomeScreen.classList.add('hidden');
             userMenu.classList.remove('hidden');
             appUi.classList.remove('hidden');
+            
+            if (!navigator.onLine) {
+                updateSyncStatus('offline');
+            }
         }
 
         function hideAppUI() {
@@ -221,6 +259,10 @@
                 syncStatus.innerHTML = `<i data-lucide="check-circle-2" class="w-3 h-3 text-green-500"></i> Synced`;
                 manualSyncBtn.disabled = false;
                 manualSyncBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else if (status === 'offline') {
+                syncStatus.innerHTML = `<i data-lucide="wifi-off" class="w-3 h-3 text-gray-400"></i> Offline Backup`;
+                manualSyncBtn.disabled = true;
+                manualSyncBtn.classList.add('opacity-50', 'cursor-not-allowed');
             } else if (status === 'error') {
                 syncStatus.innerHTML = `<i data-lucide="alert-circle" class="w-3 h-3 text-red-500"></i> Sync Error`;
                 manualSyncBtn.disabled = false;
@@ -233,7 +275,22 @@
         
         manualSyncBtn.addEventListener('click', fetchNotesFromDrive);
 
+        function saveToLocal() {
+            localStorage.setItem('cloud_notes_backup', JSON.stringify(notesArray));
+        }
+
         async function fetchNotesFromDrive() {
+            if (!navigator.onLine) {
+                updateSyncStatus('offline');
+                return;
+            }
+
+            // If we have unsynced local changes, push them to the cloud instead of overwriting local data
+            if (hasPendingChanges) {
+                await saveNotesToDrive();
+                return;
+            }
+
             loadingIndicator.classList.remove('hidden');
             notesGrid.innerHTML = '';
             emptyState.classList.add('hidden');
@@ -275,6 +332,7 @@
                     driveFileId = null;
                 }
                 
+                saveToLocal(); // Update our local offline backup with the fresh cloud data
                 renderNotes();
                 updateSyncStatus('synced');
                 showToast('Notes synced', 'success');
@@ -287,6 +345,8 @@
                 } else {
                     updateSyncStatus('error');
                     showToast('Failed to load notes from Drive.', 'error');
+                    // Fallback to local rendering if fetch fails
+                    renderNotes();
                 }
             } finally {
                 loadingIndicator.classList.add('hidden');
@@ -294,6 +354,11 @@
         }
 
         async function saveNotesToDrive() {
+            if (!navigator.onLine) {
+                updateSyncStatus('offline');
+                return;
+            }
+
             updateSyncStatus('syncing');
 
             try {
@@ -313,7 +378,6 @@
                         console.error('Drive API Error:', err);
                         throw new Error('Update failed');
                     }
-                    updateSyncStatus('synced');
                 } else {
                     // Creating new file: Multipart required to apply appDataFolder metadata
                     const boundary = '-------314159265358979323846';
@@ -353,8 +417,13 @@
                     if (data.id) {
                         driveFileId = data.id; // Save new file ID for future updates
                     }
-                    updateSyncStatus('synced');
                 }
+
+                // Upload successful
+                hasPendingChanges = false;
+                localStorage.setItem('notes_pending_sync', 'false');
+                updateSyncStatus('synced');
+
             } catch (error) {
                 console.error('Save Error:', error);
                 updateSyncStatus('error');
@@ -365,6 +434,16 @@
         // --- Note Management ---
         
         function debounceSave() {
+            // Immediately save to local offline backup
+            hasPendingChanges = true;
+            localStorage.setItem('notes_pending_sync', 'true');
+            saveToLocal();
+
+            if (!navigator.onLine) {
+                updateSyncStatus('offline');
+                return;
+            }
+
             clearTimeout(syncTimeout);
             updateSyncStatus('syncing');
             // Wait 1 second after last interaction before uploading to avoid API spam
