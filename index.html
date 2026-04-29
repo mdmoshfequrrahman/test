@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>লিখন</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#121212">
+<link rel="icon" type="image/png" href="logo.png">
+
+<meta name="title" content="লিখন - Likhon">
+<meta name="description" content="আপনার বিশ্বস্ত রাইটিং পার্টনার। বাংলায় গল্প, উপন্যাস বা কবিতা লেখার জন্য একটি অফলাইন এবং ক্লাউড-সিঙ্ক সাপোর্টেড চমৎকার রাইটিং অ্যাপ।">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://likhon-vert.vercel.app/">
+<meta property="og:title" content="লিখন - Likhon">
+<meta property="og:description" content="আপনার বিশ্বস্ত রাইটিং পার্টনার। বাংলায় গল্প, উপন্যাস বা কবিতা লেখার জন্য চমৎকার একটি রাইটিং অ্যাপ।">
+<meta property="og:image" content="https://likhon-vert.vercel.app/logo.png">
+
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://likhon-vert.vercel.app/">
+<meta property="twitter:title" content="লিখন - Likhon">
+<meta property="twitter:description" content="আপনার বিশ্বস্ত রাইটিং পার্টনার। বাংলায় গল্প, উপন্যাস বা কবিতা লেখার জন্য চমৎকার একটি রাইটিং অ্যাপ।">
+<meta property="twitter:image" content="https://likhon-vert.vercel.app/logo.png">
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;700&family=Atma:wght@400;700&family=Baloo+2:wght@400;700&family=Baloo+Da+2:wght@400;700&family=Galada&family=Hind:wght@400;700&family=Hind+Siliguri:wght@400;700&family=Kalam:wght@400;700&family=Mina:wght@400;700&family=Mukta:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Serif+Bengali:wght@400;700&family=Sahitya:wght@400;700&family=Shantell+Sans:wght@400;700&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  /* 1. DARK THEME (Default) */
+  :root { --bg: #121212; --surface: #1E1E1E; --surface2: #2C2C2C; --text: #EAEAEA; --text-muted: #A0A0A0; --text-dim: #707070; --accent: #c8a96e; --accent2: #7c6fcd; --border: #333333; --scrollbar: #333333; --shadow: 0 4px 32px rgba(0,0,0,0.5); --font-size: 17px; --line-height: 1.95; --font-family: 'Noto Serif Bengali', serif; --font-weight: 400; }
+  /* 2. LIGHT THEME */
+  [data-theme="light"] { --bg: #FAFAFA; --surface: #FFFFFF; --surface2: #F0F0F0; --text: #1A1A1A; --text-muted: #5F6368; --text-dim: #80868B; --accent: #8b6914; --accent2: #5a4fa8; --border: #E0E0E0; --scrollbar: #D1D1D1; --shadow: 0 4px 32px rgba(0,0,0,0.1); }
+  /* 3. SEPIA THEME */
+  [data-theme="sepia"] { --bg: #F4ECD8; --surface: #FCF5E3; --surface2: #E8DCC0; --text: #3B2F2F; --text-muted: #6B5B5B; --text-dim: #8C7C7C; --accent: #A67B38; --accent2: #8b6914; --border: #D4C4A8; --scrollbar: #D4C4A8; --shadow: 0 4px 32px rgba(0,0,0,0.1); }
+  /* 4. FOREST THEME */
+  [data-theme="forest"] { --bg: #1E2D24; --surface: #273A2F; --surface2: #344C3D; --text: #DDE5DC; --text-muted: #A3B5A1; --text-dim: #7A8C78; --accent: #89B086; --accent2: #6CA672; --border: #425C4B; --scrollbar: #425C4B; --shadow: 0 4px 32px rgba(0,0,0,0.4); }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { overflow-x: hidden; width: 100%; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-family); transition: background 0.3s ease, color 0.3s ease; min-height: 100vh; }
+  ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: var(--bg); } ::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 2px; }
+
+  .view { display: none; min-height: 100vh; width: 100%; animation: fadeIn 0.3s ease; }
+  .view.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ===== SPLASH ===== */
+  #splash-view { display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
+  #splash-view.active { display: flex; }
+  .splash-logo { font-family: 'Noto Serif Bengali', serif; font-weight: 700; font-size: 46px; line-height: 1; color: var(--accent); text-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+  .splash-actions { display: flex; flex-direction: row; gap: 10px; width: 100%; max-width: 400px; margin-bottom: 20px; }
+  .btn-primary { background: var(--accent); color: var(--bg); border: none; padding: 12px; border-radius: 12px; font-family: 'Hind Siliguri', sans-serif; font-size: 14px; font-weight: bold; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; gap: 6px; flex: 1; }
+  .btn-primary:active { transform: scale(0.96); }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 12px; font-family: 'Hind Siliguri', sans-serif; font-size: 14px; font-weight: bold; cursor: pointer; transition: transform 0.2s; flex: 1; }
+  .btn-secondary:active { transform: scale(0.96); }
+  .splash-theme-toggle { position: absolute; top: 20px; right: 20px; background: var(--surface); border: 1px solid var(--border); color: var(--text); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+  .splash-cp-wrapper { width: 100%; max-width: 400px; margin-bottom: 20px; }
+  .splash-feature-box { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; width: 100%; max-width: 400px; box-shadow: var(--shadow); text-align: left; }
+  .sf-title { font-family: 'Hind Siliguri', sans-serif; font-size: 14px; font-weight: bold; color: var(--accent); margin-bottom: 12px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .sf-item { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-family: 'Hind Siliguri', sans-serif; font-size: 13px; font-weight: bold; color: var(--text); }
+  .sf-item:last-child { margin-bottom: 0; }
+  .sf-icon { color: var(--accent); margin-top: 2px; }
+
+  /* ===== DASHBOARD ===== */
+  .dash-header { padding: 16px 20px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 15px; }
+  .dash-top { display: flex; justify-content: space-between; align-items: center; }
+  .dash-title { font-family: 'Noto Serif Bengali', serif; font-weight: 700; font-size: 24px; color: var(--accent); display: flex; align-items: center; gap: 10px; line-height: 1; }
+  .dash-title img { width: 30px; height: 30px; object-fit: contain; }
+  .dash-profile { font-family: 'Hind Siliguri', sans-serif; font-size: 14px; font-weight: bold; color: var(--text-dim); background: var(--surface2); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); display: flex; align-items: center; gap: 6px; }
+  .dash-profile.online { color: var(--accent); border-color: var(--accent); }
+  .dash-nav { display: flex; justify-content: space-between; align-items: center; background: var(--surface2); padding: 8px 16px; border-radius: 12px; border: 1px solid var(--border); }
+  .dash-nav-left { display: flex; gap: 12px; }
+  .dash-nav-btn { background: transparent; border: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; padding: 6px 10px; border-radius: 8px; transition: 0.2s; }
+  .dash-nav-btn:hover { color: var(--text); background: var(--surface); }
+  .dash-nav-btn svg { width: 20px; height: 20px; }
+  .dash-nav-label { font-family: 'Hind Siliguri', sans-serif; font-size: 11px; font-weight: bold; }
+  .dash-nav-btn.active-action { color: var(--accent); }
+  .dash-nav-msg { font-family: 'Hind Siliguri', sans-serif; font-size: 13px; font-style: italic; color: var(--accent); font-weight: bold; text-align: right; line-height: 1.4; padding-left: 10px; border-left: 1px solid var(--border); }
+
+  /* ===== AD / QUOTE BAR ===== */
+  .ad-quote-bar { background: var(--surface2); border-bottom: 1px solid var(--border); padding: 10px 20px; font-family: 'Hind Siliguri', sans-serif; font-size: 13px; color: var(--text-muted); text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; }
+  #quoteText { transition: opacity 0.3s ease; flex: 1; word-wrap: break-word; white-space: normal; line-height: 1.5; padding: 4px 0; }
+
+  /* Sync status badge */
+  .sync-badge { font-family: 'Hind Siliguri', sans-serif; font-size: 11px; font-weight: bold; padding: 3px 8px; border-radius: 10px; background: var(--surface2); border: 1px solid var(--border); color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; }
+  .sync-badge.synced { color: #4caf50; border-color: #4caf50; background: rgba(76,175,80,0.08); }
+  .sync-badge.syncing { color: var(--accent); border-color: var(--accent); background: rgba(200,169,110,0.08); }
+  .sync-badge.error { color: #e57373; border-color: #e57373; background: rgba(229,115,115,0.08); }
+
+  .novel-grid { padding: 20px; display: grid; gap: 16px; grid-template-columns: 1fr; padding-bottom: 100px; }
+  @media(min-width: 600px) { .novel-grid { grid-template-columns: 1fr 1fr; } }
+  .novel-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 16px; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; position: relative; overflow: hidden; }
+  .novel-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .novel-info h3 { font-family: 'Hind Siliguri', sans-serif; font-size: 18px; color: var(--text); margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 20px; }
+  .novel-stats { display: flex; justify-content: space-between; font-family: 'Hind Siliguri', sans-serif; font-size: 13px; color: var(--text-muted); font-weight: bold; }
+  .novel-actions { display: flex; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 12px; }
+  .n-action-btn { background: var(--surface2); border: 1px solid transparent; color: var(--text-dim); padding: 8px 12px; border-radius: 8px; display: flex; align-items: center; gap: 6px; cursor: pointer; transition: 0.2s; font-family: 'Hind Siliguri', sans-serif; font-size: 12px; font-weight: bold; }
+  .n-action-btn:hover { background: var(--surface); color: var(--text); border-color: var(--border); }
+  .n-action-btn.export { color: #4caf50; background: rgba(76, 175, 80, 0.1); }
+  .n-action-btn.delete { color: #e57373; background: rgba(229, 115, 115, 0.1); }
+  .fab-main { position: fixed; bottom: 30px; right: 30px; background: var(--accent); color: var(--bg); width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.4); border: none; cursor: pointer; z-index: 100; transition: transform 0.2s; }
+  .fab-main:active { transform: scale(0.9); }
+  .fab-main svg { width: 28px; height: 28px; }
+
+  /* ===== EDITOR TOPBAR ===== */
+  .editor-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 8px; height: 54px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: var(--shadow); }
+  body.is-fullscreen .editor-topbar, body.is-fullscreen .bottom-bar { display: none !important; }
+  body.is-fullscreen .writer-wrap { padding-top: 40px; padding-bottom: 40px; }
+  .topbar-left { display: flex; gap: 4px; flex: 1; justify-content: flex-start; align-items: center; }
+  .topbar-right { display: flex; gap: 4px; flex: 1; justify-content: flex-end; align-items: center; }
+  .topbar-center { flex: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; cursor: pointer; padding: 4px; border-radius: 8px; transition: 0.2s; }
+  .topbar-center:hover { background: var(--surface2); }
+  .topbar-title { font-family: 'Hind Siliguri', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: 0.05em; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: flex; align-items: center; gap: 4px; }
+  .topbar-title svg { width: 14px; height: 14px; color: var(--accent); }
+  .topbar-subtitle { font-family: 'Hind Siliguri', sans-serif; font-size: 12px; font-weight: 700; color: var(--accent); margin-top: 2px; transition: color 0.3s; white-space: nowrap; }
+  .ctrl-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 8px; padding: 2px; font-size: 16px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; min-width: 30px; height: 30px; font-family: 'Hind Siliguri', sans-serif; user-select: none; position: relative; }
+  .ctrl-btn svg { width: 16px; height: 16px; }
+  .ctrl-btn:hover { background: var(--border); }
+  .ctrl-btn:active { transform: scale(0.92); background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .ctrl-btn:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+  .ctrl-btn:disabled:hover { background: var(--surface2); }
+
+  /* ===== TOOLTIPS ===== */
+  [data-tooltip] { position: relative; }
+  [data-tooltip]::after { content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%) scale(0.9); opacity: 0; visibility: hidden; background: var(--surface2); color: var(--text); padding: 6px 10px; border-radius: 8px; font-size: 12px; white-space: nowrap; border: 1px solid var(--border); box-shadow: var(--shadow); transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; z-index: 1000; font-family: 'Hind Siliguri', sans-serif; font-weight: bold; }
+  [data-tooltip]:hover::after { opacity: 1; visibility: visible; transform: translateX(-50%) scale(1); }
+  .editor-topbar [data-tooltip]::after { bottom: auto; top: 125%; }
+  [data-tooltip].tooltip-bottom::after { bottom: auto !important; top: 125% !important; }
+  [data-tooltip].hide-tooltip::after { opacity: 0 !important; visibility: hidden !important; }
+  @media (hover: none) { [data-tooltip]::after { display: none !important; } }
+
+  /* ===== EDITOR ===== */
+  .writer-wrap { padding-top: 72px; padding-bottom: 40vh; max-width: 720px; margin: 0 auto; width: 100%; transition: padding 0.3s ease; }
+  body.typewriter-active .writer-wrap { padding-top: 40vh; padding-bottom: 60vh; }
+  /* To prevent native copy/paste popup on mobile */
+  #editor { 
+    width: 100%; min-height: 75vh; padding: 0 20px; outline: none; border: none; background: transparent; font-size: var(--font-size); font-weight: var(--font-weight); line-height: var(--line-height); text-align: justify; 
+    -webkit-touch-callout: none; /* iOS Safari Hide Callout */
+  }
+  #editor[data-placeholder]:empty:before, #editor[data-placeholder]:has(> br:only-child):before { content: attr(data-placeholder); color: var(--text-muted); font-style: italic; cursor: text; pointer-events: none; display: block; }
+  #editor [style*="background-color: yellow"], #editor [style*="background-color: rgb(255, 255, 0)"] { color: #000000 !important; }
+
+  /* ===== BOTTOM BAR ===== */
+  .bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--surface); border-top: 1px solid var(--border); padding: 8px 16px; height: 64px; display: flex; align-items: center; justify-content: center; gap: 16px; z-index: 100; box-shadow: 0 -4px 32px rgba(0,0,0,0.5); }
+  @media (max-width: 600px) { .bottom-bar { padding: 8px 10px; height: 56px; gap: 6px; justify-content: space-evenly; } .bottom-bar > div { gap: 6px !important; } .ctrl-buttons { height: 30px; } .ctrl-buttons button { width: 30px; } }
+  .ctrl-group-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .ctrl-label { font-family: 'Hind Siliguri', sans-serif; font-size: 10px; font-weight: bold; color: var(--text-muted); margin-bottom: 3px; }
+  .ctrl-buttons { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; display: flex; overflow: hidden; height: 32px; }
+  .ctrl-buttons button { background: transparent; border: none; color: var(--text); font-size: 16px; width: 34px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+  .ctrl-buttons button:hover:not(:disabled) { background: var(--surface); }
+  .ctrl-buttons button:active:not(:disabled) { background: var(--bg); color: var(--accent); }
+  .ctrl-buttons button:disabled { opacity: 0.25; cursor: not-allowed; }
+  .ctrl-buttons .divider { width: 1px; background: var(--border); }
+  .theme-cycle-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+  .theme-cycle-btn:active { transform: scale(0.9); }
+  .theme-cycle-btn svg { width: 18px; height: 18px; }
+  .theme-cycle-btn.active { border-color: var(--accent); color: var(--accent); background: var(--surface); }
+  #themeCycleBtnEdit { color: var(--accent); }
+  .bar-divider { width: 1px; height: 28px; background: var(--border); margin: 0 2px; }
+
+  /* ===== OVERLAYS & MODALS ===== */
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 400; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+  .overlay.open { display: flex; align-items: flex-end; justify-content: center; }
+  @media (min-width: 768px) { .overlay.open { align-items: center; } .panel { border-radius: 20px; margin: auto; box-shadow: 0 10px 50px rgba(0,0,0,0.7); } }
+  .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px 20px 0 0; padding: 20px 20px 25px; width: 100%; max-width: 480px; animation: slideUp 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); position: relative; margin: 0; display: flex; flex-direction: column; max-height: 85vh; }
+  .panel-body { overflow-y: auto; flex: 1; margin: 0 -20px; padding: 0 20px; }
+  @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .close-modal-btn { position: absolute; top: 15px; right: 20px; background: var(--surface2); border: 1px solid var(--border); border-radius: 50%; width: 30px; height: 30px; color: var(--text); font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .panel-title { font-family: 'Hind Siliguri', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 20px; text-align: center; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+  .custom-input { padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-family: 'Hind Siliguri', sans-serif; font-size: 15px; width: 100%; outline: none; transition: border-color 0.2s; }
+  .custom-input:focus { border-color: var(--accent); }
+  .generic-btn { background: var(--accent); color: var(--bg); border: none; border-radius: 8px; padding: 10px 12px; font-size: 14px; font-weight: bold; cursor: pointer; font-family: 'Hind Siliguri', sans-serif; transition: transform 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .generic-btn:active { transform: scale(0.95); }
+  .generic-btn.secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .generic-btn.danger { background: rgba(229, 115, 115, 0.15); color: #e57373; border: 1px solid rgba(229, 115, 115, 0.3); }
+  .panel.danger-mode { border: 2px solid rgba(229, 115, 115, 0.5); box-shadow: 0 10px 40px rgba(229, 115, 115, 0.2); }
+  .panel.danger-mode .panel-title, .panel.danger-mode #confirmModalDesc { color: #e57373; border-bottom-color: rgba(229, 115, 115, 0.2); }
+  #confirmModalDesc { font-family: 'Hind Siliguri'; font-size: 15px; font-weight: bold; color: var(--text-dim); text-align: center; margin-bottom: 20px; }
+  .settings-row { margin-bottom: 20px; }
+  .settings-label { font-family: 'Hind Siliguri', sans-serif; font-size: 13px; font-weight: bold; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+  .font-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; background: var(--border); border-radius: 2px; outline: none; }
+  .font-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; opacity: 0; pointer-events: none; transition: 0.3s ease; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+  .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
+  .sidebar { position: absolute; left: -320px; top: 0; bottom: 0; width: 300px; max-width: 85vw; background: var(--surface); transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1); display: flex; flex-direction: column; box-shadow: 4px 0 32px rgba(0,0,0,0.5); border-right: 1px solid var(--border); }
+  .sidebar-overlay.open .sidebar { transform: translateX(320px); }
+  .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .sidebar-title { font-family: 'Hind Siliguri', sans-serif; font-weight: 700; font-size: 16px; color: var(--text); }
+  .add-chapter-btn { background: var(--accent); color: var(--bg); border: none; border-radius: 6px; width: 28px; height: 28px; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; }
+  .add-chapter-btn:active { transform: scale(0.9); }
+  .chapter-list { flex: 1; overflow-y: auto; padding: 10px 0; }
+  .chapter-item { padding: 12px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.02); font-family: 'Hind Siliguri', sans-serif; font-size: 14px; font-weight: bold; color: var(--text-dim); transition: 0.2s; }
+  .chapter-item:hover, .chapter-item.active { background: var(--surface2); color: var(--text); }
+  .chapter-item.active { border-left: 4px solid var(--accent); }
+  .chapter-title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 10px; }
+  .chapter-actions { display: flex; gap: 6px; }
+  .ch-action-btn { padding: 5px; border-radius: 4px; color: var(--text-dim); display: flex; align-items: center; justify-content: center; }
+  .ch-action-btn:hover { background: var(--border); color: var(--text); }
+  .ch-action-btn.del:hover { background: rgba(229, 115, 115, 0.1); color: #e57373; }
+
+  /* ===== FLOATING MENU ===== */
+  .floating-menu { position: fixed; z-index: 1000; background: var(--surface); border: 1px solid var(--border); padding: 8px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); display: none; flex-wrap: wrap; justify-content: center; gap: 6px; max-width: 290px; }
+  .fm-btn { background: var(--surface2); color: var(--text); border: 1px solid transparent; border-radius: 8px; width: 48px; height: 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; font-family: 'Hind Siliguri', sans-serif; font-size: 10px; font-weight: bold; gap: 2px; }
+  .fm-btn svg { width: 16px; height: 16px; }
+  .fm-btn:hover { background: var(--border); color: var(--accent); }
+  .fm-divider { width: 100%; height: 1px; background: var(--border); margin: 2px 0; }
+  ::highlight(search-results) { background-color: #ffd54f; color: #000; }
+  ::highlight(active-match) { background-color: #ff6f00; color: #fff; }
+
+  #toast { visibility: hidden; min-width: 250px; background-color: var(--accent); color: var(--bg); text-align: center; border-radius: 8px; padding: 12px; position: fixed; z-index: 9999; left: 50%; bottom: 80px; transform: translateX(-50%); font-family: 'Hind Siliguri', sans-serif; font-weight: bold; font-size: 15px; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
+  #toast.show { visibility: visible; opacity: 1; bottom: 85px; }
+  .exit-fullscreen-btn { display: none; position: fixed; top: 10px; right: 10px; z-index: 9999; background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 36px; height: 36px; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(4px); }
+  body.is-fullscreen .exit-fullscreen-btn { display: flex; }
+</style>
+</head>
+<body>
+
+<!-- ===== SPLASH VIEW ===== -->
+<div id="splash-view" class="view active">
+  <button class="splash-theme-toggle" onclick="cycleThemeGlobally()" id="splashThemeBtn"></button>
+  
+  <div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-bottom: 25px;">
+    <img src="logo.png" alt="লিখন লোগো" style="width: 54px; height: 54px; object-fit: contain;">
+    <div class="splash-logo" style="margin-bottom: 0;">লিখন</div>
+  </div>
+
+  <div class="splash-actions">
+    <button class="btn-primary" onclick="loginWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      গুগল লগইন
+    </button>
+    <button class="btn-secondary" onclick="useOfflineMode()">অফলাইন মোড</button>
+  </div>
+
+  <div class="splash-cp-wrapper" id="splashCpSection"></div>
+
+  <div class="splash-feature-box">
+    <div class="sf-title">মূল ফিচারসমূহ</div>
+    <div class="sf-item"><span class="sf-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> অফলাইন রাইটিং ও অটো-সেভ</div>
+    <div class="sf-item"><span class="sf-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> গুগল ড্রাইভ ক্লাউড সিঙ্ক</div>
+    <div class="sf-item"><span class="sf-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> ফোকাস মোড (টাইপরাইটার স্টাইল)</div>
+    <div class="sf-item"><span class="sf-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> ৪টি চোখের আরামদায়ক থিম</div>
+    <div class="sf-item"><span class="sf-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> ১৫টির বেশি আকর্ষণীয় বাংলা ফন্ট</div>
+    <div class="sf-item"><span class="sf-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> সহজ অধ্যায় ব্যবস্থাপনা</div>
+    <div class="sf-item"><span class="sf-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> ওয়ার্ড ফাইলে ডাউনলোড (.doc)</div>
+    <div class="sf-item"><span class="sf-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> স্মার্ট ফাইন্ড ও রিপ্লেস</div>
+    <div class="sf-item"><span class="sf-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> ফ্লোটিং টেক্সট এডিটর</div>
+    <div class="sf-item"><span class="sf-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span> লাইভ শব্দ গণনা</div>
+  </div>
+</div>
+
+<!-- ===== DASHBOARD VIEW ===== -->
+<div id="dashboard-view" class="view">
+  <header class="dash-header">
+    <div class="dash-top">
+      <div class="dash-title"><img src="logo.png" alt="লিখন"> লিখন</div>
+      <div id="profile-area" class="dash-profile" onclick="openAccountModal()" style="cursor:pointer;"></div>
+    </div>
+    <div class="dash-nav">
+      <div class="dash-nav-left">
+        <button class="dash-nav-btn" onclick="openModal('settingsOverlay')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span class="dash-nav-label">সেটিংস</span></button>
+        <button class="dash-nav-btn active-action" onclick="syncWithCloud()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg><span class="dash-nav-label">সিঙ্ক</span></button>
+        <button class="dash-nav-btn" onclick="cycleThemeGlobally()" id="dashThemeBtn"><span class="dash-nav-label">থিম</span></button>
+        <button class="dash-nav-btn" id="dashInstallBtn" style="display:none;" onclick="installPWA()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span class="dash-nav-label">ইনস্টল</span>
+        </button>
+      </div>
+      <div class="dash-nav-msg" id="syncStatusMsg">"শব্দে হোক<br>স্বপ্নের বুনন"</div>
+    </div>
+  </header>
+
+  <div class="ad-quote-bar" id="adQuoteBar">
+    <span id="quoteText">লোড হচ্ছে...</span>
+  </div>
+
+  <div class="novel-grid" id="novel-grid"></div>
+  <button class="fab-main" onclick="createNewNovel()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+</div>
+
+<!-- ===== EDITOR VIEW ===== -->
+<div id="editor-view" class="view">
+  <header class="editor-topbar" id="topbar">
+    <div class="topbar-left">
+      <button class="ctrl-btn" onclick="closeEditorBackBtn()" data-tooltip="ড্যাশবোর্ডে ফিরুন"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg></button>
+      <button class="ctrl-btn" onclick="openSidebar()" data-tooltip="অধ্যায়সমূহ"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+    </div>
+    <div class="topbar-center tooltip-bottom" onclick="renameCurrentChapterModal()" data-tooltip="অধ্যায়ের নাম পরিবর্তন">
+      <span class="topbar-title" id="active-chapter-title">অধ্যায় ১ <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></span>
+      <span class="topbar-subtitle"><span id="wordCountDisplay">শব্দ: ০</span> <span style="margin:0 4px;color:var(--text-dim);">•</span> <span id="saveStatus">টাইপিং মোড</span></span>
+    </div>
+    <div class="topbar-right">
+      <button class="ctrl-btn" id="btnUndo" onclick="undoAction()" disabled data-tooltip="পূর্বাবস্থায়"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"></path><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path></svg></button>
+      <button class="ctrl-btn" id="btnRedo" onclick="redoAction()" disabled data-tooltip="পুনরায়"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"></path><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"></path></svg></button>
+      <button class="ctrl-btn" onclick="toggleFullScreen()" data-tooltip="ফুল স্ক্রিন"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
+    </div>
+  </header>
+  <main class="writer-wrap">
+    <div id="editor" contenteditable="true" spellcheck="false" data-placeholder="এখানে আপনার গল্প বা উপন্যাস লেখা শুরু করুন..." oncontextmenu="return false;"></div>
+  </main>
+  <div class="bottom-bar">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="theme-cycle-btn" style="border-radius:10px;width:36px;height:36px;" onclick="openModal('findReplaceOverlay')" data-tooltip="খুঁজুন ও পরিবর্তন"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+      <button class="theme-cycle-btn" style="border-radius:10px;width:36px;height:36px;color:#e57373;" onclick="clearText()" data-tooltip="সব লেখা মুছুন"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+      <button class="theme-cycle-btn" id="typewriterBtn" style="border-radius:10px;width:36px;height:36px;" onclick="toggleTypewriterMode()" data-tooltip="ফোকাস মোড"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg></button>
+    </div>
+    <div class="bar-divider"></div>
+    <div style="display:flex;gap:14px;align-items:center;">
+      <div class="ctrl-group-wrapper"><span class="ctrl-label">ফন্ট সাইজ</span><div class="ctrl-buttons"><button id="btnFsMinus" onclick="changeFontSize(-1)">-</button><div class="divider"></div><button id="btnFsPlus" onclick="changeFontSize(1)">+</button></div></div>
+      <button class="theme-cycle-btn" style="border-radius:50%;width:40px;height:40px;" onclick="cycleThemeGlobally()" id="themeCycleBtnEdit" data-tooltip="থিম পরিবর্তন"></button>
+      <div class="ctrl-group-wrapper"><span class="ctrl-label">লাইন গ্যাপ</span><div class="ctrl-buttons"><button id="btnLhMinus" onclick="changeLineHeight(-5)">-</button><div class="divider"></div><button id="btnLhPlus" onclick="changeLineHeight(5)">+</button></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FLOATING MENU ===== -->
+<div class="floating-menu" id="floatingMenu">
+  <button class="fm-btn" onpointerdown="event.preventDefault()" onclick="execCmd('bold')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path></svg><span>বোল্ড</span></button>
+  <button class="fm-btn" onpointerdown="event.preventDefault()" onclick="execCmd('italic')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="4" x2="10" y2="4"></line><line x1="14" y1="20" x2="5" y2="20"></line><line x1="15" y1="4" x2="9" y2="20"></line></svg><span>ইটালিক</span></button>
+  <button class="fm-btn" onpointerdown="event.preventDefault()" onclick="execCmd('underline')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg><span>আন্ডারলাইন</span></button>
+  <button class="fm-btn" onpointerdown="event.preventDefault()" onclick="formatHighlight()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l4 4-8 8-4-4 8-8z"></path><path d="M16 6l4 4-4 4-4-4 4-4z"></path><line x1="2" y1="22" x2="22" y2="22"></line></svg><span>হাইলাইট</span></button>
+  <button class="fm-btn" onpointerdown="event.preventDefault()" onclick="execCmd('removeFormat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h14v3"></path><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line><line x1="18" y1="16" x2="22" y2="20"></line><line x1="22" y1="16" x2="18" y2="20"></line></svg><span>ক্লিয়ার</span></button>
+  <div class="fm-divider"></div>
+  <button class="fm-btn" onpointerdown="event.preventDefault()" onclick="execCmd('copy')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg><span>কপি</span></button>
+  <button class="fm-btn" onpointerdown="event.preventDefault()" onclick="execCmd('cut')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg><span>কাট</span></button>
+  <button class="fm-btn" onpointerdown="event.preventDefault()" onclick="execPaste()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg><span>পেস্ট</span></button>
+  <button class="fm-btn" onpointerdown="event.preventDefault()" onclick="selectAllText()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-dasharray="4 4"></rect></svg><span>সব সিলেক্ট</span></button>
+  <button class="fm-btn" onpointerdown="event.preventDefault()" onclick="floatingSearch()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><span>খুঁজুন</span></button>
+</div>
+
+<!-- ===== MODALS ===== -->
+<div class="overlay" id="inputModalOverlay" style="z-index:500;" onclick="closeModalDirect('inputModalOverlay')">
+  <div class="panel" style="max-width:340px;margin:auto;" onclick="event.stopPropagation()">
+    <div class="panel-title" id="inputModalTitle">নতুন নাম</div>
+    <input type="text" id="inputModalField" class="custom-input" style="margin-bottom:16px;" autocomplete="off">
+    <div style="display:flex;gap:8px;"><button class="generic-btn secondary" style="flex:1;" onclick="history.back()">বাতিল</button><button class="generic-btn" style="flex:1;" id="inputModalSubmit">সংরক্ষণ করুন</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="confirmModalOverlay" style="z-index:500;" onclick="closeModalDirect('confirmModalOverlay')">
+  <div class="panel" id="confirmModalPanel" style="max-width:340px;margin:auto;" onclick="event.stopPropagation()">
+    <div class="panel-title" id="confirmModalTitle">সতর্কতা</div>
+    <div id="confirmModalDesc"></div>
+    <div style="display:flex;gap:8px;"><button class="generic-btn secondary" style="flex:1;" onclick="history.back()">বাতিল</button><button class="generic-btn danger" style="flex:1;" id="confirmModalSubmit">মুছে ফেলুন</button></div>
+  </div>
+</div>
+
+<div class="overlay" id="settingsOverlay" style="z-index:500;" onclick="closeModalDirect('settingsOverlay')">
+  <div class="panel" onclick="event.stopPropagation()">
+    <button class="close-modal-btn" onclick="history.back()">&times;</button>
+    <div class="panel-title" style="margin-bottom:15px;">লিখন সেটিংস<br><span style="font-size:13px;color:var(--text-muted);font-weight:normal;font-family:'Hind Siliguri',sans-serif;">লিখন v1.0 | <a href="https://www.facebook.com/profile.php?id=61561451308425" target="_blank" style="color:var(--accent);text-decoration:none;">ডেভেলপার: মোঃ মোসফেকুর রহমান</a></span></div>
+    <div class="panel-body">
+      <!-- Settings Links / Cross Platform Populated via JS -->
+      <div class="settings-row" id="appShareSection"></div>
+
+      <div class="settings-row">
+        <div class="settings-label"><span>ফন্ট নির্বাচন</span></div>
+        <select id="fontSelect" class="custom-input" style="font-weight:bold;font-family:var(--font-family);margin-bottom:12px;" onchange="setFontFromDropdown(this.value)">
+          <option value="'Noto Serif Bengali', serif">নোটো সেরিফ বাংলা</option>
+          <option value="'Noto Sans Bengali', sans-serif">নোটো স্যান্স বাংলা</option>
+          <option value="'Hind Siliguri', sans-serif">হিন্দ সিলিগুড়ি</option>
+          <option value="'Mukta', sans-serif">মুক্তা</option>
+          <option value="'Tiro Bangla', serif">তিরো বাংলা</option>
+          <option value="'Anek Bangla', sans-serif">আনেক বাংলা</option>
+          <option value="'Baloo Da 2', cursive">বালু দা ২</option>
+          <option value="'Atma', cursive"> আত্মা</option>
+          <option value="'Galada', cursive">গালাদা</option>
+          <option value="'Mina', sans-serif">মিনা</option>
+          <option value="'Sahitya', serif">সাহিত্য</option>
+          <option value="'Kalam', cursive">কালাম</option>
+          <option value="'Shantell Sans', cursive">শান্তেল স্যান্স</option>
+          <option value="'Baloo 2', cursive">বালু</option>
+          <option value="'Hind', sans-serif">হিন্দ বাংলা</option>
+        </select>
+        <div id="fontPreviewBox" style="position:relative;padding:22px 12px 12px;border:1px dashed var(--border);border-radius:8px;text-align:center;font-size:18px;color:var(--text);background:var(--surface2);transition:font-family 0.2s;">
+          <span style="position:absolute;top:6px;left:10px;font-size:11px;color:var(--text-muted);font-family:'Hind Siliguri',sans-serif;font-weight:bold;">ফন্ট প্রিভিউ</span>
+          আমার সোনার বাংলা, আমি তোমায় ভালোবাসি।
+        </div>
+      </div>
+      <div class="settings-row"><div class="settings-label"><span>ফন্ট সাইজ</span><span style="color:var(--accent);font-size:13px;" id="fontSizeDisplay">17px</span></div><input type="range" class="font-slider" id="fontSlider" min="13" max="30" value="17" oninput="setFontSize(this.value)"></div>
+      <div class="settings-row"><div class="settings-label"><span>লাইন গ্যাপ</span><span style="color:var(--accent);font-size:13px;" id="lineHeightDisplay">১.৯৫</span></div><input type="range" class="font-slider" id="lineSlider" min="145" max="250" value="195" oninput="setLineHeight(this.value)"></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="accountOverlay" style="z-index:500;" onclick="closeModalDirect('accountOverlay')">
+  <div class="panel" style="max-width:380px;margin:auto;" onclick="event.stopPropagation()">
+    <button class="close-modal-btn" onclick="history.back()">&times;</button>
+    <div class="panel-title">অ্যাকাউন্ট সেটিংস</div>
+    <div style="text-align:center;margin-bottom:20px;">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <h3 style="font-family:'Hind Siliguri',sans-serif;color:var(--text);font-size:18px;" id="acc-name-display">অফলাইন মোড</h3>
+      <p style="font-family:'Hind Siliguri',sans-serif;color:var(--text-muted);font-size:13px;" id="acc-status-display">কোনো অ্যাকাউন্ট যুক্ত নেই</p>
+      <p style="font-family:'Hind Siliguri',sans-serif;color:var(--text-dim);font-size:12px;margin-top:6px;" id="acc-token-status"></p>
+    </div>
+    <div style="display:flex;gap:10px;flex-direction:column;">
+      <button class="generic-btn" id="acc-add-btn" onclick="loginWithGoogle()">গুগল অ্যাকাউন্ট যুক্ত করুন</button>
+      <button class="generic-btn secondary" id="acc-change-btn" onclick="loginWithGoogle()" style="display:none;">অ্যাকাউন্ট পরিবর্তন / পুনরায় লগইন</button>
+      <button class="generic-btn" id="acc-sync-btn" onclick="syncWithCloud();history.back();" style="display:none;">এখনই সিঙ্ক করুন</button>
+      <button class="generic-btn danger" id="acc-logout-btn" onclick="logoutAccount()" style="display:none;">লগআউট (অফলাইন মোডে যান)</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="findReplaceOverlay" style="z-index:500;" onclick="closeModalDirect('findReplaceOverlay')">
+  <div class="panel" onclick="event.stopPropagation()">
+    <button class="close-modal-btn" onclick="history.back()">&times;</button>
+    <div class="panel-title">খুঁজুন ও পরিবর্তন করুন</div>
+    <div style="display:flex;gap:8px;flex-direction:column;">
+      <select id="searchScope" class="custom-input" style="margin-bottom:8px;padding:6px;font-weight:bold;" onchange="performWriterSearch()"><option value="chapter">এই অধ্যায়ে খুঁজুন</option><option value="novel">পুরো উপন্যাসে খুঁজুন</option></select>
+      <input type="text" id="findInput" class="custom-input" placeholder="যে শব্দটি খুঁজবেন..." oninput="performWriterSearch()">
+      <div id="findStatus" style="color:var(--accent);font-size:13px;font-weight:bold;text-align:center;min-height:18px;font-family:'Hind Siliguri',sans-serif;"></div>
+      <input type="text" id="replaceInput" class="custom-input" placeholder="পরিবর্তন করে যা লিখবেন...">
+      <div style="display:flex;gap:8px;margin-top:5px;"><button class="generic-btn" style="flex:1;" onclick="nextWriterMatch()">পরবর্তী খুঁজুন</button><button class="generic-btn" style="flex:1;" onclick="replaceCurrentWriter()">পরিবর্তন করুন</button></div>
+      <button class="generic-btn secondary" onclick="replaceAllWriter()">সব পরিবর্তন করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SIDEBAR ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeModalDirect('sidebarOverlay')">
+  <div class="sidebar" onclick="event.stopPropagation()">
+    <div class="sidebar-header">
+      <div style="display:flex;flex-direction:column;">
+        <div class="sidebar-title">অধ্যায়সমূহ</div>
+        <div id="novelWordCountDisplay" style="font-size:12px;color:var(--text-muted);font-family:'Hind Siliguri',sans-serif;font-weight:bold;margin-top:2px;">মোট শব্দ: ০</div>
+      </div>
+      <button class="add-chapter-btn" onclick="addNewChapter()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+    </div>
+    <div class="chapter-list" id="chapterList"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<button class="exit-fullscreen-btn" onclick="toggleFullScreen()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+
+<script>
+  // ===== DEVICE & ENVIRONMENT CHECKS =====
+  const isMobileBrowser = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isAndroidApp = typeof Android !== 'undefined';
+
+  // ===== PWA =====
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js'));
+  }
+
+  // ===== THEME ICONS =====
+  const iconMoon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+  const iconSun = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+  const iconSepia = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path></svg>`;
+  const iconForest = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><line x1="2" y1="22" x2="11" y2="13"></line></svg>`;
+
+  const engToBn = (str) => str.toString().replace(/\d/g, d => '০১২৩৪৫৬৭৮৯'[d]);
+
+  // ===== PWA INSTALLATION & AD QUOTES (From external JSON) =====
+  let deferredPrompt;
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    // Only show install buttons for PC/Desktop browsers
+    if (!isMobileBrowser && !isAndroidApp) {
+      const installBtnWrapper = document.getElementById('pcInstallBtnWrapper');
+      if (installBtnWrapper) installBtnWrapper.style.display = 'block';
+      const dashInstallBtn = document.getElementById('dashInstallBtn');
+      if (dashInstallBtn) dashInstallBtn.style.display = 'flex';
+    }
+  });
+
+  function installPWA() {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          const installBtnWrapper = document.getElementById('pcInstallBtnWrapper');
+          if (installBtnWrapper) installBtnWrapper.style.display = 'none';
+          const dashInstallBtn = document.getElementById('dashInstallBtn');
+          if (dashInstallBtn) dashInstallBtn.style.display = 'none';
+        }
+        deferredPrompt = null;
+      });
+    }
+  }
+
+  let bengaliQuotes = [];
+
+  function updateQuoteDisplay() {
+    const quoteEl = document.getElementById('quoteText');
+    if (!quoteEl) return;
+    
+    if (!navigator.onLine) {
+        quoteEl.style.opacity = 0;
+        setTimeout(() => {
+            quoteEl.innerHTML = "লিখন অ্যাপে আপনাকে স্বাগতম";
+            quoteEl.style.opacity = 1;
+        }, 300);
+        return;
+    }
+
+    if (bengaliQuotes.length > 0) {
+      const randomItem = bengaliQuotes[Math.floor(Math.random() * bengaliQuotes.length)];
+      quoteEl.style.opacity = 0;
+      setTimeout(() => {
+        if (randomItem.link) {
+          quoteEl.innerHTML = `<a href="${randomItem.link}" target="_blank" style="color:var(--accent); text-decoration:underline;">${randomItem.text}</a>`;
+        } else {
+          quoteEl.innerHTML = randomItem.text;
+        }
+        quoteEl.style.opacity = 1;
+      }, 300);
+    }
+  }
+
+  // Fetch quotes from GitHub hosted ads.json
+  fetch('https://mdmoshfequrrahman.github.io/likhon/ads.json?t=' + Date.now())
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        bengaliQuotes = data;
+        updateQuoteDisplay();
+      }
+    })
+    .catch(err => {
+      bengaliQuotes = [{ text: "বাংলা আমাদের অহংকার, বাংলা আমাদের ভাষা।" }];
+      updateQuoteDisplay();
+    });
+
+  setInterval(updateQuoteDisplay, 10000);
+  window.addEventListener('online', updateQuoteDisplay);
+  window.addEventListener('offline', updateQuoteDisplay);
+
+  // ===== INDEXEDDB =====
+  const DB_NAME = 'LikhonAppDB'; const DB_VERSION = 1; let dbInstance;
+  function initDB() {
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, DB_VERSION);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains('novels')) db.createObjectStore('novels', { keyPath: 'id' });
+        if (!db.objectStoreNames.contains('chapters')) db.createObjectStore('chapters', { keyPath: 'id' });
+      };
+      req.onsuccess = (e) => { dbInstance = e.target.result; resolve(dbInstance); };
+      req.onerror = (e) => reject(e.target.error);
+    });
+  }
+  function dbPutNovel(novel) { return new Promise(r => { const tx = dbInstance.transaction('novels','readwrite'); tx.objectStore('novels').put(novel); tx.oncomplete = () => r(); }); }
+  function dbGetAllNovels() { return new Promise(r => { const req = dbInstance.transaction('novels','readonly').objectStore('novels').getAll(); req.onsuccess = () => r(req.result || []); }); }
+  function dbDeleteNovel(id) { return new Promise(r => { const tx = dbInstance.transaction('novels','readwrite'); tx.objectStore('novels').delete(id); tx.oncomplete = () => r(); }); }
+  function dbPutChapter(ch) { return new Promise(r => { const tx = dbInstance.transaction('chapters','readwrite'); tx.objectStore('chapters').put(ch); tx.oncomplete = () => r(); }); }
+  function dbGetAllChapters() { return new Promise(r => { const req = dbInstance.transaction('chapters','readonly').objectStore('chapters').getAll(); req.onsuccess = () => r(req.result || []); }); }
+  function dbDeleteChapter(id) { return new Promise(r => { const tx = dbInstance.transaction('chapters','readwrite'); tx.objectStore('chapters').delete(id); tx.oncomplete = () => r(); }); }
+
+  let novelsList = []; let currentNovelId = null; let chaptersList = []; let currentChapterId = null;
+  let historyStack = []; let historyIndex = -1; let isUndoRedoing = false; let otherChaptersWordCount = 0;
+
+  function showView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+  }
+
+  // ===== HASH BASED NAVIGATION (BACK GESTURE) =====
+  function pushHash(hash) {
+    if (window.location.hash !== hash) {
+      history.pushState(null, null, hash);
+    }
+  }
+
+  window.addEventListener('popstate', (e) => {
+    const h = window.location.hash;
+    
+    // Always close overlays if they are open
+    const openOverlays = document.querySelectorAll('.overlay.open, .sidebar-overlay.open');
+    if (openOverlays.length > 0) {
+      openOverlays.forEach(el => el.classList.remove('open'));
+      // Restore previous state context
+      pushHash(document.getElementById('editor-view').classList.contains('active') ? '#editor' : '#dashboard');
+      return;
+    }
+    
+    // Manage Views
+    if (h === '#editor') {
+      showView('editor-view');
+    } else if (h === '#dashboard' || h === '') {
+      if (document.getElementById('editor-view').classList.contains('active')) {
+        closeEditorAction(); 
+        pushHash('#dashboard'); 
+      } else {
+        // Warning confirmation before exiting App/Browser Tab
+        showConfirmModal(
+          'অ্যাপ বন্ধ করুন',
+          'আপনি কি নিশ্চিত যে বের হতে চান? সব লেখা স্বয়ংক্রিয়ভাবে সংরক্ষিত আছে।',
+          () => {
+            if (isAndroidApp && Android.closeApp) Android.closeApp();
+            else window.history.go(-2); // Best effort for web
+          },
+          'বের হতে চাই', true
+        );
+        pushHash('#dashboard'); // Trap restored if they cancel
+      }
+    }
+  });
+
+
+  // ===== TOKEN MANAGEMENT =====
+  const DRIVE_FILE_NAME = 'likhon_backup.json';
+  const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata email profile';
+
+  function getToken() { return localStorage.getItem('likhon_google_token'); }
+  function saveToken(token, expiresIn) {
+    localStorage.setItem('likhon_google_token', token);
+    localStorage.setItem('likhon_token_expiry', Date.now() + (expiresIn * 1000));
+  }
+  function isTokenExpired() {
+    const expiry = localStorage.getItem('likhon_token_expiry');
+    if (!expiry) return true;
+    return Date.now() > parseInt(expiry) - 60000; // 1 min safety buffer
+  }
+  function clearAuthData() {
+    localStorage.removeItem('likhon_google_token');
+    localStorage.removeItem('likhon_token_expiry');
+    localStorage.removeItem('likhon_drive_file_id');
+  }
+
+  // ===== ACCOUNT & AUTH =====
+  async function useOfflineMode() {
+    localStorage.setItem('likhon_setup_complete', 'true');
+    showToast('অফলাইন মোড চালু হয়েছে');
+    await renderDashboard();
+    pushHash('#dashboard');
+    showView('dashboard-view');
+  }
+
+  function loginWithGoogle() {
+    if (isAndroidApp && Android.startGoogleLogin) {
+      Android.startGoogleLogin();
+    } else {
+      // Web / PWA login via Google Identity Services
+      const client = google.accounts.oauth2.initTokenClient({
+        client_id: '156182417310-rkf6pnk57gib3qggmfs2ok96fddgv6ul.apps.googleusercontent.com', // <-- replace with Web Client ID
+        scope: DRIVE_SCOPE,
+        callback: async (response) => {
+          if (response && response.access_token) {
+            try {
+              const userRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${response.access_token}` }
+              });
+              const user = await userRes.json();
+              window.onGoogleLoginSuccess(response.access_token, response.expires_in, user.email, user.name);
+            } catch (e) {
+              showToast('লগইন ব্যর্থ হয়েছে, আবার চেষ্টা করুন');
+            }
+          }
+        }
+      });
+      client.requestAccessToken();
+    }
+  }
+
+  function silentTokenRefresh() {
+  setSyncStatus('syncing', 'সেশন রিনিউ হচ্ছে...');
+  
+  if (typeof Android !== 'undefined' && Android.refreshGoogleToken) {
+    // Android App background refresh
+    Android.refreshGoogleToken(getToken() || "");
+  } else {
+    // Web Browser background refresh
+    const client = google.accounts.oauth2.initTokenClient({
+      client_id: '156182417310-hl891ppqjt8i2al3a76ivjn4tlhct7he.apps.googleusercontent.com', // Your Client ID
+      scope: DRIVE_SCOPE,
+      prompt: 'none', // <--- This is the magic word. It tells Google not to show UI.
+      callback: async (response) => {
+        if (response && response.access_token) {
+          saveToken(response.access_token, response.expires_in);
+          renderDashboardProfile();
+          syncWithCloud(false, true); // Resume sync silently
+        } else {
+          forceManualLogin();
+        }
+      },
+      error_callback: () => forceManualLogin()
+    });
+    client.requestAccessToken();
+  }
+}
+
+function forceManualLogin() {
+  showToast('নিরাপত্তার জন্য পুনরায় লগইন করুন');
+  renderDashboardProfile();
+  setSyncStatus('error', 'লগইন প্রয়োজন');
+}
+
+  // Called from web GIS callback AND from Android native bridge
+  window.onGoogleLoginSuccess = async function(token, expiresIn, email, name) {
+    saveToken(token, expiresIn);
+    localStorage.setItem('likhon_setup_complete', 'true');
+    localStorage.setItem('likhon_user_name', name);
+    localStorage.setItem('likhon_user_email', email);
+    showToast('লগইন সফল! ডেটা সিঙ্ক হচ্ছে...');
+    
+    // Close overlay by triggering back history
+    if(document.getElementById('accountOverlay').classList.contains('open')) history.back();
+
+    if (document.getElementById('splash-view').classList.contains('active')) {
+      pushHash('#dashboard');
+      showView('dashboard-view');
+    }
+    // Matrix: Login -> Sync
+    await syncWithCloud(true);
+    await renderDashboard();
+  };
+
+  function renderDashboardProfile() {
+    const name = localStorage.getItem('likhon_user_name');
+    const profileArea = document.getElementById('profile-area');
+    if (!profileArea) return;
+    const isLoggedIn = name && !isTokenExpired();
+    if (isLoggedIn) {
+      profileArea.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> ${name}`;
+      profileArea.classList.add('online');
+    } else {
+      const expired = name && isTokenExpired();
+      profileArea.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> ${expired ? 'সেশন মেয়াদ শেষ' : 'অফলাইন মোড'}`;
+      profileArea.classList.remove('online');
+    }
+  }
+
+  function openAccountModal() {
+    const name = localStorage.getItem('likhon_user_name');
+    const email = localStorage.getItem('likhon_user_email');
+    const expired = isTokenExpired();
+    const isLoggedIn = name && !expired;
+    const wasLoggedIn = name && expired;
+
+    document.getElementById('acc-name-display').innerText = name || 'অফলাইন মোড';
+    document.getElementById('acc-status-display').innerText = isLoggedIn
+      ? email : wasLoggedIn ? 'সেশন মেয়াদ শেষ হয়েছে' : 'কোনো অ্যাকাউন্ট যুক্ত নেই';
+    document.getElementById('acc-token-status').innerText = isLoggedIn
+      ? '✓ সক্রিয় সেশন' : wasLoggedIn ? '⚠ পুনরায় লগইন প্রয়োজন' : '';
+    document.getElementById('acc-add-btn').style.display = (isLoggedIn || wasLoggedIn) ? 'none' : 'flex';
+    document.getElementById('acc-change-btn').style.display = (isLoggedIn || wasLoggedIn) ? 'flex' : 'none';
+    document.getElementById('acc-sync-btn').style.display = isLoggedIn ? 'flex' : 'none';
+    document.getElementById('acc-logout-btn').style.display = (isLoggedIn || wasLoggedIn) ? 'flex' : 'none';
+    
+    openModal('accountOverlay');
+  }
+
+  function logoutAccount() {
+    clearAuthData();
+    localStorage.removeItem('likhon_user_name');
+    localStorage.removeItem('likhon_user_email');
+    showToast('অফলাইন মোডে ফিরে গেছেন');
+    history.back(); // Close modal
+    renderDashboardProfile();
+  }
+
+  // ===== GOOGLE DRIVE SYNC ENGINE =====
+
+  async function findDriveFileId(token) {
+    try {
+      const res = await fetch(`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name='${DRIVE_FILE_NAME}'&fields=files(id)`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) throw new Error('Unauthorized');
+        return null;
+      }
+      const data = await res.json();
+      return (data.files && data.files.length > 0) ? data.files[0].id : null;
+    } catch (e) {
+      if(e.message === 'Unauthorized') { clearAuthData(); renderDashboardProfile(); }
+      return null;
+    }
+  }
+
+  async function pullFromDrive(token, fileId) {
+    try {
+      const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) throw new Error('Unauthorized');
+        return null;
+      }
+      return await res.json();
+    } catch (e) {
+      if(e.message === 'Unauthorized') { clearAuthData(); renderDashboardProfile(); }
+      return null;
+    }
+  }
+
+  async function pushToDrive(token, fileId, data) {
+    const blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+    try {
+      if (!fileId) {
+        // Create file metadata first
+        const metaRes = await fetch('https://www.googleapis.com/drive/v3/files', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: DRIVE_FILE_NAME, parents: ['appDataFolder'] })
+        });
+        if (!metaRes.ok) throw new Error('File create failed');
+        const metaData = await metaRes.json();
+        fileId = metaData.id;
+        localStorage.setItem('likhon_drive_file_id', fileId);
+      }
+      // Upload content
+      const uploadRes = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`, {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: blob
+      });
+      if (!uploadRes.ok) {
+        if (uploadRes.status === 401 || uploadRes.status === 403) throw new Error('Unauthorized');
+      }
+      return fileId;
+    } catch (e) {
+      if(e.message === 'Unauthorized') { clearAuthData(); renderDashboardProfile(); }
+      throw e;
+    }
+  }
+
+  function resolveTitleConflicts(novels) {
+    const counts = {};
+    novels.forEach(n => {
+      let base = n.title.replace(/\s\([0-9০-৯]+\)$/, '');
+      if (!counts[base]) counts[base] = [];
+      counts[base].push(n);
+    });
+    for (let base in counts) {
+      if (counts[base].length > 1) {
+        // Sort ascending by lastModified so oldest gets the base name
+        counts[base].sort((a, b) => a.lastModified - b.lastModified);
+        counts[base].forEach((n, idx) => {
+          if (idx > 0) n.title = `${base} (${engToBn(idx + 1)})`;
+        });
+      }
+    }
+    return novels;
+  }
+
+  function mergeData(local, drive) {
+    const mergedNovels = [...local.novels];
+    const mergedChapters = [...local.chapters];
+
+    // Merge novels
+    for (const dNovel of (drive.novels || [])) {
+      const idx = mergedNovels.findIndex(n => n.id === dNovel.id);
+      if (idx === -1) {
+        mergedNovels.push(dNovel);
+      } else if (dNovel.lastModified > mergedNovels[idx].lastModified) {
+        mergedNovels[idx] = { ...mergedNovels[idx], ...dNovel };
+      }
+    }
+
+    // Merge chapters
+    for (const dCh of (drive.chapters || [])) {
+      const idx = mergedChapters.findIndex(c => c.id === dCh.id);
+      if (idx === -1) mergedChapters.push(dCh); 
+      else if (dCh.lastModified > mergedChapters[idx].lastModified) mergedChapters[idx] = dCh; 
+    }
+
+    return { 
+      novels: resolveTitleConflicts(mergedNovels), 
+      chapters: mergedChapters 
+    };
+  }
+
+  function setSyncStatus(state, msg) {
+    const el = document.getElementById('syncStatusMsg');
+    if (!el) return;
+    if (state === 'syncing') {
+      el.innerHTML = `<span class="sync-badge syncing">⟳ ${msg}</span>`;
+    } else if (state === 'synced') {
+      el.innerHTML = `<span class="sync-badge synced">✓ ${msg}</span>`;
+      setTimeout(() => { el.innerHTML = '"শব্দে হোক<br>স্বপ্নের বুনন"'; }, 3000);
+    } else if (state === 'error') {
+      el.innerHTML = `<span class="sync-badge error">✗ ${msg}</span>`;
+      setTimeout(() => { el.innerHTML = '"শব্দে হোক<br>স্বপ্নের বুনন"'; }, 4000);
+    } else {
+      el.innerHTML = '"শব্দে হোক<br>স্বপ্নের বুনন"';
+    }
+  }
+
+  async function syncWithCloud(pullFirst = false, silent = false) {
+    if (!navigator.onLine) return; // Fail silently if no internet
+
+    const token = getToken();
+    if (!token) { 
+        if(!silent) showToast('সিঙ্ক করতে আগে অ্যাকাউন্ট যুক্ত করুন'); 
+        return; 
+    }
+
+if (isTokenExpired()) {
+      silentTokenRefresh(); // Try to fix it in the background
+      return; 
+    }
+
+    setSyncStatus('syncing', 'সিঙ্কিং...');
+    if(!silent) showToast('সিঙ্কিং...');
+
+    try {
+      let fileId = localStorage.getItem('likhon_drive_file_id') || await findDriveFileId(token);
+      if (fileId) localStorage.setItem('likhon_drive_file_id', fileId);
+
+      const localNovels = await dbGetAllNovels();
+      const localChapters = await dbGetAllChapters();
+
+      if (fileId) {
+        const driveData = await pullFromDrive(token, fileId);
+        if (driveData && (driveData.novels || driveData.chapters)) {
+          const merged = mergeData({ novels: localNovels, chapters: localChapters }, driveData);
+
+          for (const nv of merged.novels) await dbPutNovel(nv);
+          for (const ch of merged.chapters) await dbPutChapter(ch);
+          novelsList = merged.novels;
+
+          await pushToDrive(token, fileId, {
+            novels: merged.novels, chapters: merged.chapters, syncedAt: Date.now()
+          });
+
+          setSyncStatus('synced', 'সিঙ্ক সম্পন্ন');
+          if(!silent) showToast('সিঙ্ক সফল হয়েছে!');
+          return;
+        }
+      }
+
+      await pushToDrive(token, null, {
+        novels: resolveTitleConflicts(localNovels), 
+        chapters: localChapters, 
+        syncedAt: Date.now()
+      });
+      setSyncStatus('synced', 'ব্যাকআপ তৈরি হয়েছে');
+      if(!silent) showToast('গুগল ড্রাইভে ব্যাকআপ তৈরি হয়েছে!');
+
+    } catch (e) {
+      setSyncStatus('error', 'সিঙ্ক ব্যর্থ');
+      if(!silent) showToast('সিঙ্ক ব্যর্থ হয়েছে। ইন্টারনেট চেক করুন।');
+    }
+  }
+
+  // Frequency Matrix Triggers
+  setInterval(() => {
+     if (!isAndroidApp && getToken() && !isTokenExpired() && navigator.onLine) {
+         syncWithCloud(false, true); // Silent 5 min background sync for Web
+     }
+  }, 5 * 60 * 1000);
+
+  document.addEventListener('visibilitychange', () => {
+      // Matrix: Tab Close / Hide
+      if (document.visibilityState === 'hidden' && !isAndroidApp) {
+          if (getToken() && !isTokenExpired() && navigator.onLine) syncWithCloud(false, true);
+      }
+  });
+
+
+  // ===== SETTINGS & CROSS PLATFORM LINKS =====
+  function renderSettingsLinks() {
+    const container = document.getElementById('appShareSection');
+    const webUrl = 'https://mdmoshfequrrahman.github.io/likhon/';
+    const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.mushfiq.likhon';
+
+    if (isAndroidApp) {
+      container.innerHTML = `
+        <div class="settings-label"><span>ওয়েব ভার্সন</span></div>
+        <div style="background:var(--surface2); padding:12px; border-radius:8px; border:1px solid var(--border); text-align:center;">
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px; font-family:'Hind Siliguri', sans-serif;">ব্রাউজার থেকে ব্যবহার করতে নিচের লিংকটি ভিজিট করুন</p>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input type="text" readonly value="${webUrl}" class="custom-input" style="flex:1; font-size:13px; padding:8px; text-align:center;">
+            <button class="generic-btn" onclick="copyToClipboard('${webUrl}')" style="padding:8px 12px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg></button>
+            <button class="generic-btn secondary" onclick="shareAppWebLink('${webUrl}')" style="padding:8px 12px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button>
+          </div>
+        </div>
+      `;
+    } else {
+      container.innerHTML = `
+        <div class="settings-label"><span>অ্যান্ড্রয়েড অ্যাপ</span></div>
+        <div style="background:var(--surface2); padding:12px; border-radius:8px; border:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom: 12px;">
+          <div>
+            <p style="font-size:13px; color:var(--text-muted); font-family:'Hind Siliguri', sans-serif; margin-bottom:4px;">অ্যান্ড্রয়েড ফোনে অ্যাপটি ডাউনলোড করুন</p>
+            <a href="${playStoreUrl}" target="_blank" style="color:var(--accent);font-size:14px;text-decoration:none;font-weight:bold;">🔗 Google Play Store</a>
+          </div>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(playStoreUrl)}" style="width:70px; height:70px; border-radius:8px; background:white; padding:4px;" alt="QR Code">
+        </div>
+
+        <div id="pcInstallBtnWrapper" style="display: ${deferredPrompt && !isMobileBrowser ? 'block' : 'none'};">
+          <div class="settings-label"><span>ডেস্কটপ / পিসি অ্যাপ</span></div>
+          <button class="generic-btn" onclick="installPWA()" style="width:100%; margin-bottom:10px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> 
+            পিসি বা ম্যাকে ইনস্টল করুন
+          </button>
+        </div>
+      `;
+    }
+  }
+
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => showToast('লিংক কপি করা হয়েছে!'));
+  }
+
+  function shareAppWebLink(url) {
+    if (navigator.share) navigator.share({ title: 'লিখন - রাইটিং পার্টনার', text: 'অসাধারণ এই রাইটিং অ্যাপটি ব্যবহার করে দেখুন!', url: url }).catch(() => {});
+    else copyToClipboard(url);
+  }
+
+  async function renderDashboard() {
+    renderDashboardProfile();
+    const grid = document.getElementById('novel-grid');
+    grid.innerHTML = '';
+    novelsList = await dbGetAllNovels();
+    novelsList.sort((a, b) => b.lastModified - a.lastModified);
+    const allChapters = await dbGetAllChapters();
+
+    novelsList.forEach(nv => {
+      const novelChapters = allChapters.filter(c => c.novelId === nv.id);
+      let wordCount = 0;
+      novelChapters.forEach(ch => {
+        const dummy = document.createElement('div');
+        dummy.innerHTML = ch.content;
+        const txt = (dummy.innerText || dummy.textContent).replace(/\s+/g, ' ').trim();
+        if (txt) wordCount += txt.split(' ').length;
+      });
+      const card = document.createElement('div');
+      card.className = 'novel-card';
+      const dateStr = new Date(nv.lastModified).toLocaleDateString('bn-BD');
+      card.innerHTML = `
+        <div class="novel-info" onclick="openNovel('${nv.id}')">
+          <h3>${nv.title}</h3>
+          <div class="novel-stats">
+            <span>মোট শব্দ: ${engToBn(wordCount)}</span>
+            <span>আপডেট: ${dateStr}</span>
+          </div>
+        </div>
+        <div class="novel-actions">
+          <button class="n-action-btn export" onclick="exportNovel('${nv.id}',event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            ডাউনলোড
+          </button>
+          <button class="n-action-btn" onclick="renameNovel('${nv.id}',event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+            নাম পরিবর্তন
+          </button>
+          <button class="n-action-btn delete" onclick="deleteNovel('${nv.id}',event)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </div>`;
+      grid.appendChild(card);
+    });
+  }
+
+  async function openNovel(id) {
+    currentNovelId = id;
+    const novel = novelsList.find(n => n.id === id);
+    if (novel) { novel.lastModified = Date.now(); await dbPutNovel(novel); }
+    const allChapters = await dbGetAllChapters();
+    chaptersList = allChapters.filter(c => c.novelId === id);
+    if (chaptersList.length === 0) {
+      const defCh = { id: 'ch_' + Date.now(), novelId: id, title: 'অধ্যায় ১', content: '', lastModified: Date.now() };
+      chaptersList.push(defCh);
+      await dbPutChapter(defCh);
+    }
+    await loadChapter(chaptersList[0].id);
+    
+    pushHash('#editor');
+    showView('editor-view');
+  }
+
+  function closeEditorBackBtn() {
+    history.back(); // Invokes popstate which triggers closeEditorAction
+  }
+
+  async function closeEditorAction() {
+    if (currentChapterId) await saveChapterToDB();
+    await renderDashboard();
+    showView('dashboard-view');
+    // Matrix: Close editor -> Dashboard -> Sync
+    if (getToken() && !isTokenExpired()) syncWithCloud(false, true);
+  }
+
+  function createNewNovel() {
+    showInputModal('নতুন উপন্যাস', 'উপন্যাস ' + engToBn(novelsList.length + 1), async (val) => {
+      if (!val.trim()) return;
+      const nv = { id: 'nv_' + Date.now(), title: val.trim(), lastModified: Date.now() };
+      novelsList.push(nv);
+      await dbPutNovel(nv);
+      renderDashboard();
+    });
+  }
+
+  function renameNovel(id, e) {
+    e.stopPropagation();
+    const nv = novelsList.find(n => n.id === id);
+    if (!nv) return;
+    showInputModal('উপন্যাসের নাম পরিবর্তন', nv.title, async (val) => {
+      if (!val.trim()) return;
+      nv.title = val.trim(); nv.lastModified = Date.now();
+      await dbPutNovel(nv); renderDashboard();
+    });
+  }
+
+  function deleteNovel(id, e) {
+    e.stopPropagation();
+    const nv = novelsList.find(n => n.id === id);
+    showConfirmModal('উপন্যাস মুছুন', `আপনি কি নিশ্চিত যে "${nv.title}" মুছে ফেলতে চান?`, async () => {
+      novelsList = novelsList.filter(n => n.id !== id);
+      await dbDeleteNovel(id);
+      const allCh = await dbGetAllChapters();
+      for (const c of allCh.filter(c => c.novelId === id)) await dbDeleteChapter(c.id);
+      renderDashboard();
+    });
+  }
+
+  async function exportNovel(id, e) {
+    e.stopPropagation();
+    const nv = novelsList.find(n => n.id === id);
+    if (!nv) return;
+    
+    const allCh = await dbGetAllChapters();
+    const novelChs = allCh.filter(c => c.novelId === id).sort((a, b) => parseInt(a.id.replace('ch_','')) - parseInt(b.id.replace('ch_','')));
+    const currentFont = getComputedStyle(document.documentElement).getPropertyValue('--font-family').trim() || "'Noto Serif Bengali', serif";
+    let htmlContent = `<h1>${nv.title}</h1><br><br>`;
+    novelChs.forEach((ch, i) => { if (i > 0) htmlContent += '<br><br>'; htmlContent += `<h2>${ch.title}</h2><br>${ch.content}`; });
+    const preHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>${nv.title}</title><style>body{font-family:${currentFont};font-size:12pt;line-height:1.8;text-align:justify;}h1{text-align:center;font-size:16pt;margin:0!important;}h2{text-align:left;font-size:14pt;margin:0!important;}p,div{margin:0!important;padding:0!important;}</style></head><body>`;
+    const finalHtml = preHtml + htmlContent + '</body></html>';
+
+    if (isAndroidApp && Android.downloadDoc) {
+      // NOTE for Android Dev: Web JS cannot access the Downloads folder directly.
+      // Therefore, the Android Native Java/Kotlin side MUST handle the logic to check
+      // if the file exists, and prompt the user to "Replace" or "Rename" accordingly.
+      Android.downloadDoc(nv.title, finalHtml);
+    } else {
+      // Direct download for PC/Mobile browsers without showing modal dialog
+      const blob = new Blob(['\ufeff', finalHtml], { type: 'application/msword' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url; link.download = nv.title + '.doc';
+      document.body.appendChild(link); link.click();
+      document.body.removeChild(link); URL.revokeObjectURL(url);
+      showToast('ডাউনলোড শুরু হয়েছে');
+    }
+  }
+
+  // ===== EDITOR LOGIC =====
+  const editor = document.getElementById('editor');
+  const wordCountDisplay = document.getElementById('wordCountDisplay');
+  const saveStatus = document.getElementById('saveStatus');
+  let typewriterMode = localStorage.getItem('writer_typewriter') === 'true';
+  if (typewriterMode) {
+    document.body.classList.add('typewriter-active');
+    document.getElementById('typewriterBtn').classList.add('active');
+    if (saveStatus) saveStatus.innerText = 'ফোকাস মোড';
+  }
+
+  async function loadChapter(id) {
+    if (currentChapterId) await saveChapterToDB();
+    currentChapterId = id;
+    const ch = chaptersList.find(c => c.id === id);
+    if (!ch) return;
+    editor.innerHTML = ch.content || '';
+    const editIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>';
+    document.getElementById('active-chapter-title').innerHTML = ch.title + ' ' + editIcon;
+    calculateOtherChaptersWordCount();
+    historyStack = []; historyIndex = -1;
+    pushHistoryState();
+    updateWordCountImmediate();
+    closeModalDirect('sidebarOverlay');
+  }
+
+  function calculateOtherChaptersWordCount() {
+    otherChaptersWordCount = 0;
+    chaptersList.filter(c => c.novelId === currentNovelId && c.id !== currentChapterId).forEach(ch => {
+      const dummy = document.createElement('div');
+      dummy.innerHTML = ch.content;
+      const text = (dummy.innerText || dummy.textContent).replace(/\s+/g, ' ').trim();
+      if (text) otherChaptersWordCount += text.split(' ').length;
+    });
+  }
+
+  function updateWordCountImmediate() {
+    const text = (editor.innerText || editor.textContent).replace(/\s+/g, ' ').trim();
+    const wordCount = text === '' ? 0 : text.split(' ').length;
+    if (wordCountDisplay) wordCountDisplay.innerText = `শব্দ: ${engToBn(wordCount)}`;
+    const totalNovelWords = otherChaptersWordCount + wordCount;
+    const novelWcDisplay = document.getElementById('novelWordCountDisplay');
+    if (novelWcDisplay) novelWcDisplay.innerText = `মোট শব্দ: ${engToBn(totalNovelWords)}`;
+  }
+
+  function getCaretOffset() {
+    let caretOffset = 0;
+    const sel = window.getSelection();
+    if (sel.rangeCount > 0 && editor.contains(sel.anchorNode)) {
+      try {
+        const range = sel.getRangeAt(0);
+        const preCaretRange = range.cloneRange();
+        preCaretRange.selectNodeContents(editor);
+        preCaretRange.setEnd(range.endContainer, range.endOffset);
+        caretOffset = preCaretRange.toString().length;
+      } catch (e) {}
+    }
+    return caretOffset;
+  }
+
+  function setCaretOffset(offset) {
+    if (!editor) return;
+    const sel = window.getSelection();
+    const range = document.createRange();
+    let charCount = 0, node, found = false;
+    const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT, null, false);
+    while (node = walker.nextNode()) {
+      const nextCharCount = charCount + node.length;
+      if (!found && offset >= charCount && offset <= nextCharCount) {
+        range.setStart(node, offset - charCount);
+        range.collapse(true);
+        found = true;
+      }
+      charCount = nextCharCount;
+    }
+    if (!found) { range.selectNodeContents(editor); range.collapse(false); }
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  function updateUndoRedoButtons() {
+    document.getElementById('btnUndo').disabled = historyIndex <= 0;
+    document.getElementById('btnRedo').disabled = historyIndex >= historyStack.length - 1;
+  }
+
+  function pushHistoryState() {
+    const html = editor.innerHTML;
+    if (historyIndex >= 0 && historyStack[historyIndex].html === html) return;
+    const caret = getCaretOffset();
+    historyStack = historyStack.slice(0, historyIndex + 1);
+    historyStack.push({ html, caret });
+    if (historyStack.length > 50) historyStack.shift(); else historyIndex++;
+    updateUndoRedoButtons();
+  }
+
+  function restoreHistoryState(offset) {
+    isUndoRedoing = true;
+    historyIndex += offset;
+    const state = historyStack[historyIndex];
+    editor.innerHTML = state.html;
+    setCaretOffset(state.caret);
+    centerCaret(true);
+    updateWordCountImmediate();
+    updateUndoRedoButtons();
+    triggerDebouncedSave(false);
+    setTimeout(() => isUndoRedoing = false, 50);
+  }
+
+  function undoAction() { if (historyIndex > 0) restoreHistoryState(-1); }
+  function redoAction() { if (historyIndex < historyStack.length - 1) restoreHistoryState(1); }
+
+  let saveTimeout;
+  let idleSyncTimer;
+
+  function triggerDebouncedSave(pushToHistory = true) {
+    clearTimeout(saveTimeout);
+    clearTimeout(idleSyncTimer); // reset idle timer
+
+    if (saveStatus && saveStatus.innerText !== 'অসংরক্ষিত...') {
+      saveStatus.style.color = 'var(--text-muted)';
+      saveStatus.innerText = 'অসংরক্ষিত...';
+    }
+    
+    saveTimeout = setTimeout(async () => {
+      if (saveStatus) { saveStatus.style.color = 'var(--accent2)'; saveStatus.innerText = 'সংরক্ষিত হচ্ছে...'; }
+      await saveChapterToDB();
+      if (pushToHistory) pushHistoryState();
+      if (saveStatus) {
+        setTimeout(() => {
+          saveStatus.style.color = 'var(--accent)';
+          saveStatus.innerText = typewriterMode ? 'ফোকাস মোড' : 'টাইপিং মোড';
+        }, 600);
+      }
+    }, 2000);
+
+    // Matrix: Idle 3 min while writing
+    idleSyncTimer = setTimeout(() => {
+      if (getToken() && !isTokenExpired() && navigator.onLine) syncWithCloud(false, true);
+    }, 3 * 60 * 1000);
+  }
+
+  async function saveChapterToDB() {
+    if (!currentChapterId) return;
+    const ch = chaptersList.find(c => c.id === currentChapterId);
+    if (ch) { ch.content = editor.innerHTML; ch.lastModified = Date.now(); await dbPutChapter(ch); }
+  }
+
+  editor.addEventListener('input', () => {
+    if (isUndoRedoing) return;
+    if (editor.innerHTML === '<br>' || editor.innerHTML === '<div><br></div>') editor.innerHTML = '';
+    updateWordCountImmediate();
+    if (typewriterMode) centerCaret();
+    triggerDebouncedSave();
+  });
+
+  function centerCaret(force = false) {
+    if (!typewriterMode && !force) return;
+    try {
+      const sel = window.getSelection();
+      if (!sel.rangeCount) return;
+      const range = sel.getRangeAt(0).cloneRange();
+      range.collapse(true);
+      let rect = range.getBoundingClientRect();
+      if (rect.height === 0) {
+        const span = document.createElement('span');
+        span.appendChild(document.createTextNode('\u200b'));
+        range.insertNode(span);
+        rect = span.getBoundingClientRect();
+        span.parentNode.removeChild(span);
+      }
+      if (rect.top !== 0) window.scrollTo({ top: rect.top + window.pageYOffset - (window.innerHeight / 2), behavior: 'smooth' });
+    } catch (e) {}
+  }
+
+  editor.addEventListener('keyup', (e) => { if (typewriterMode && ['Enter','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) centerCaret(); });
+  editor.addEventListener('click', () => { if (typewriterMode) centerCaret(); });
+
+  function toggleTypewriterMode() {
+    typewriterMode = !typewriterMode;
+    localStorage.setItem('writer_typewriter', typewriterMode);
+    document.body.classList.toggle('typewriter-active', typewriterMode);
+    document.getElementById('typewriterBtn').classList.toggle('active', typewriterMode);
+    if (typewriterMode) centerCaret();
+    if (saveStatus) saveStatus.innerText = typewriterMode ? 'ফোকাস মোড' : 'টাইপিং মোড';
+    showToast(typewriterMode ? 'ফোকাস মোড অন' : 'ফোকাস মোড অফ');
+  }
+
+  function clearText() {
+    if (editor && editor.innerText.trim() !== '') {
+      showConfirmModal('সব লেখা মুছুন', 'আপনি কি এই অধ্যায়ের সব লেখা মুছে ফেলতে চান?', () => {
+        editor.innerHTML = '';
+        editor.focus(); // Focus immediately to show placeholder 
+        updateWordCountImmediate(); triggerDebouncedSave();
+        showToast('সব লেখা মুছে ফেলা হয়েছে');
+      });
+    }
+  }
+
+  function renameCurrentChapterModal() {
+    const ch = chaptersList.find(c => c.id === currentChapterId);
+    if (!ch) return;
+    showInputModal('অধ্যায়ের নাম পরিবর্তন', ch.title, async (val) => {
+      if (!val.trim()) return;
+      ch.title = val.trim(); ch.lastModified = Date.now();
+      await dbPutChapter(ch);
+      const editIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>';
+      document.getElementById('active-chapter-title').innerHTML = ch.title + ' ' + editIcon;
+      renderSidebar();
+    });
+  }
+
+  // ===== SIDEBAR =====
+  function renderSidebar() {
+    const list = document.getElementById('chapterList');
+    list.innerHTML = '';
+    chaptersList.sort((a, b) => parseInt(a.id.replace('ch_','')) - parseInt(b.id.replace('ch_',''))).forEach(ch => {
+      const div = document.createElement('div');
+      div.className = `chapter-item ${ch.id === currentChapterId ? 'active' : ''}`;
+      div.onclick = () => loadChapter(ch.id);
+      const tSpan = document.createElement('span');
+      tSpan.className = 'chapter-title'; tSpan.innerText = ch.title;
+      const aDiv = document.createElement('div'); aDiv.className = 'chapter-actions';
+      const editBtn = document.createElement('span'); editBtn.className = 'ch-action-btn';
+      editBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+      editBtn.onclick = (e) => { e.stopPropagation(); renameChapterSb(ch.id); };
+      const delBtn = document.createElement('span'); delBtn.className = 'ch-action-btn del';
+      delBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+      delBtn.onclick = (e) => { e.stopPropagation(); deleteChapterSb(ch.id); };
+      aDiv.appendChild(editBtn); aDiv.appendChild(delBtn);
+      div.appendChild(tSpan); div.appendChild(aDiv);
+      list.appendChild(div);
+    });
+  }
+
+  function openSidebar() { renderSidebar(); openModal('sidebarOverlay'); }
+
+  function addNewChapter() {
+    showInputModal('নতুন অধ্যায়', 'অধ্যায় ' + engToBn(chaptersList.length + 1), async (val) => {
+      if (!val.trim()) return;
+      const ch = { id: 'ch_' + Date.now(), novelId: currentNovelId, title: val.trim(), content: '', lastModified: Date.now() };
+      chaptersList.push(ch);
+      await dbPutChapter(ch);
+      await loadChapter(ch.id);
+    });
+  }
+
+  function renameChapterSb(id) {
+    const ch = chaptersList.find(c => c.id === id);
+    if (!ch) return;
+    showInputModal('নাম পরিবর্তন', ch.title, async (val) => {
+      if (!val.trim()) return;
+      ch.title = val.trim(); ch.lastModified = Date.now();
+      await dbPutChapter(ch);
+      if (currentChapterId === id) loadChapter(id);
+      renderSidebar();
+    });
+  }
+
+  function deleteChapterSb(id) {
+    if (chaptersList.length <= 1) { showToast('অন্তত একটি অধ্যায় থাকা আবশ্যক'); return; }
+    showConfirmModal('মুছুন', 'অধ্যায়টি মুছে ফেলতে চান?', async () => {
+      chaptersList = chaptersList.filter(c => c.id !== id);
+      await dbDeleteChapter(id);
+      if (currentChapterId === id) loadChapter(chaptersList[0].id);
+      else { calculateOtherChaptersWordCount(); updateWordCountImmediate(); renderSidebar(); }
+    });
+  }
+
+  // ===== THEME & SETTINGS =====
+  const themes = ['dark', 'light', 'sepia', 'forest'];
+  function cycleThemeGlobally() {
+    const t = themes[(themes.indexOf(document.documentElement.getAttribute('data-theme')) + 1) % themes.length];
+    document.documentElement.setAttribute('data-theme', t);
+    localStorage.setItem('writer_theme', t);
+    updateThemeIcons(t);
+  }
+  function updateThemeIcons(t) {
+    const icon = t === 'light' ? iconSun : t === 'sepia' ? iconSepia : t === 'forest' ? iconForest : iconMoon;
+    document.querySelectorAll('#splashThemeBtn, #dashThemeBtn, #themeCycleBtnEdit').forEach(b => {
+      if (b.id === 'dashThemeBtn') b.innerHTML = icon + '<span class="dash-nav-label">থিম</span>';
+      else b.innerHTML = icon;
+    });
+  }
+
+  function toggleFullScreen() {
+    document.body.classList.toggle('is-fullscreen');
+    const isFull = document.body.classList.contains('is-fullscreen');
+    
+    if (isAndroidApp && Android.toggleSystemFullScreen) {
+        Android.toggleSystemFullScreen(isFull);
+    } else if (isFull) {
+        const docEl = document.documentElement;
+        if (docEl.requestFullscreen) docEl.requestFullscreen().catch(() => {});
+        else if (docEl.webkitRequestFullscreen) docEl.webkitRequestFullscreen();
+    } else if (!isFull) {
+        if (document.exitFullscreen) document.exitFullscreen();
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }
+    if (isFull) showToast('ফুল স্ক্রিন চালু হয়েছে');
+  }
+
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement) {
+      document.body.classList.remove('is-fullscreen');
+      if (isAndroidApp && Android.toggleSystemFullScreen) Android.toggleSystemFullScreen(false);
+    }
+  });
+
+  function setFontSize(v) {
+    v = parseInt(v);
+    document.documentElement.style.setProperty('--font-size', v + 'px');
+    document.getElementById('fontSizeDisplay').textContent = engToBn(v) + 'px';
+    document.getElementById('fontSlider').value = v;
+    localStorage.setItem('writer_font', v);
+    document.getElementById('btnFsMinus').disabled = (v <= 13);
+    document.getElementById('btnFsPlus').disabled = (v >= 30);
+  }
+  function changeFontSize(diff) { setFontSize(parseInt(document.getElementById('fontSlider').value) + diff); }
+
+  function setLineHeight(v) {
+    v = parseInt(v);
+    const lh = (v / 100).toFixed(2);
+    document.documentElement.style.setProperty('--line-height', lh);
+    document.getElementById('lineHeightDisplay').textContent = engToBn(lh);
+    document.getElementById('lineSlider').value = v;
+    localStorage.setItem('writer_lh', v);
+    document.getElementById('btnLhMinus').disabled = (v <= 145);
+    document.getElementById('btnLhPlus').disabled = (v >= 250);
+  }
+  function changeLineHeight(diff) { setLineHeight(parseInt(document.getElementById('lineSlider').value) + diff); }
+
+  function setFontFromDropdown(v) {
+    document.documentElement.style.setProperty('--font-family', v);
+    document.getElementById('fontSelect').style.fontFamily = v;
+    document.getElementById('fontPreviewBox').style.fontFamily = v;
+    localStorage.setItem('writer_fontfam', v);
+  }
+
+  // ===== MODALS =====
+  let inputCb = null, confCb = null;
+  function showInputModal(title, def, cb) {
+    document.getElementById('inputModalTitle').innerText = title;
+    const f = document.getElementById('inputModalField');
+    f.value = def; inputCb = cb;
+    openModal('inputModalOverlay');
+    setTimeout(() => f.focus(), 100);
+    document.getElementById('inputModalSubmit').onclick = () => { if (inputCb) inputCb(f.value); history.back(); };
+  }
+
+  function showConfirmModal(t, d, cb, btnText = 'মুছে ফেলুন', isDanger = false) {
+    document.getElementById('confirmModalTitle').innerText = t;
+    document.getElementById('confirmModalDesc').innerText = d;
+    confCb = cb;
+    document.getElementById('confirmModalSubmit').innerText = btnText;
+    const p = document.getElementById('confirmModalPanel');
+    if (isDanger) p.classList.add('danger-mode'); else p.classList.remove('danger-mode');
+    openModal('confirmModalOverlay');
+    document.getElementById('confirmModalSubmit').onclick = () => { if (confCb) confCb(); history.back(); };
+  }
+
+  function openModal(id) { 
+    if(id === 'settingsOverlay') renderSettingsLinks();
+    document.getElementById(id).classList.add('open'); 
+    pushHash('#' + id);
+  }
+  function closeModalDirect(id) { 
+    document.getElementById(id).classList.remove('open'); 
+    // Clean up the URL hash so the Android back button doesn't get confused
+    if (window.location.hash === '#' + id) {
+      history.back(); 
+    }
+  }
+  function showToast(msg) { const t = document.getElementById('toast'); t.innerText = msg; t.className = 'show'; setTimeout(() => t.className = '', 3000); }
+
+  // ===== FLOATING MENU & FIND-REPLACE =====
+  const fMenu = document.getElementById('floatingMenu');
+  let suppressFMenu = false;
+
+  document.addEventListener('selectionchange', () => {
+    const sel = window.getSelection();
+    if (!sel.isCollapsed && sel.toString().trim().length > 0 && editor.contains(sel.anchorNode) && !suppressFMenu) {
+      fMenu.style.display = 'flex';
+      const rect = sel.getRangeAt(0).getBoundingClientRect();
+      let top = rect.top - fMenu.offsetHeight - 15;
+      if (top < 70) top = rect.bottom + 15;
+      let left = rect.left + (rect.width / 2) - (fMenu.offsetWidth / 2);
+      if (left < 10) left = 10;
+      if (left + fMenu.offsetWidth > window.innerWidth - 10) left = window.innerWidth - fMenu.offsetWidth - 10;
+      fMenu.style.top = top + 'px'; fMenu.style.left = left + 'px';
+    } else { fMenu.style.display = 'none'; }
+  });
+  editor.addEventListener('mouseup', () => suppressFMenu = false);
+  editor.addEventListener('keyup', (e) => { if (e.key.includes('Arrow') || e.shiftKey) suppressFMenu = false; });
+
+  function execCmd(cmd) { suppressFMenu = true; document.execCommand(cmd, false, null); if (['copy','cut'].includes(cmd)) window.getSelection().removeAllRanges(); fMenu.style.display = 'none'; editor.focus(); triggerDebouncedSave(); setTimeout(() => suppressFMenu = true, 10); }
+  function formatHighlight() { suppressFMenu = true; document.execCommand('backColor', false, 'yellow'); fMenu.style.display = 'none'; editor.focus(); triggerDebouncedSave(); setTimeout(() => suppressFMenu = true, 10); }
+  async function execPaste() { suppressFMenu = true; try { document.execCommand('insertText', false, await navigator.clipboard.readText()); triggerDebouncedSave(); } catch (e) { showToast('Ctrl+V চাপুন'); } fMenu.style.display = 'none'; setTimeout(() => suppressFMenu = true, 10); }
+  function floatingSearch() { suppressFMenu = true; const t = window.getSelection().toString().trim(); fMenu.style.display = 'none'; if (t) { document.getElementById('findInput').value = t; openModal('findReplaceOverlay'); performWriterSearch(); } }
+  function selectAllText() { suppressFMenu = true; if (!editor || editor.innerText.trim() === '') return; const r = document.createRange(); r.selectNodeContents(editor); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); fMenu.style.display = 'none'; editor.focus(); showToast('সব টেক্সট সিলেক্ট করা হয়েছে!'); setTimeout(() => suppressFMenu = true, 10); }
+
+  let sRanges = [], sMatch = -1;
+  function clearWriterSearch() { if (CSS.highlights) CSS.highlights.clear(); sRanges = []; sMatch = -1; document.getElementById('findStatus').innerText = ''; }
+  function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function performWriterSearch() {
+    clearWriterSearch();
+    const term = document.getElementById('findInput').value.trim();
+    if (!term) return;
+    const regex = new RegExp(`(${escapeRegExp(term)})`, 'gi');
+    const walker = document.createTreeWalker(editor, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    while (node = walker.nextNode()) {
+      let m;
+      while ((m = regex.exec(node.nodeValue)) !== null) {
+        const r = new Range(); r.setStart(node, m.index); r.setEnd(node, m.index + m[0].length);
+        sRanges.push(r);
+      }
+    }
+    if (sRanges.length > 0) {
+      if (CSS.highlights) CSS.highlights.set('search-results', new Highlight(...sRanges));
+      sMatch = 0; focusWriterMatch();
+    } else { document.getElementById('findStatus').innerText = `"${term}" পাওয়া যায়নি।`; }
+  }
+  function focusWriterMatch() {
+    if (sRanges[sMatch]) {
+      if (CSS.highlights) { CSS.highlights.set('active-match', new Highlight(sRanges[sMatch])); }
+      const rect = sRanges[sMatch].getBoundingClientRect();
+      window.scrollTo({ top: rect.top + window.pageYOffset - (window.innerHeight / 2), behavior: 'smooth' });
+      document.getElementById('findStatus').innerText = `${engToBn(sRanges.length)} টির মধ্যে ${engToBn(sMatch + 1)} নম্বর`;
+    }
+  }
+  function nextWriterMatch() { if (sRanges.length === 0) performWriterSearch(); else { sMatch = (sMatch + 1) % sRanges.length; focusWriterMatch(); } }
+  function replaceCurrentWriter() {
+    const rep = document.getElementById('replaceInput').value;
+    if (sRanges.length > 0 && sMatch >= 0) {
+      sRanges[sMatch].deleteContents(); sRanges[sMatch].insertNode(document.createTextNode(rep));
+      performWriterSearch();
+      if (sRanges.length > 0) { if (sMatch >= sRanges.length) sMatch = 0; focusWriterMatch(); }
+      triggerDebouncedSave();
+    }
+  }
+  function replaceAllWriter() {
+    const rep = document.getElementById('replaceInput').value;
+    if (sRanges.length === 0) performWriterSearch();
+    if (sRanges.length > 0) {
+      const c = sRanges.length;
+      for (let i = c - 1; i >= 0; i--) { sRanges[i].deleteContents(); sRanges[i].insertNode(document.createTextNode(rep)); }
+      clearWriterSearch();
+      document.getElementById('findStatus').innerText = `${engToBn(c)} টি পরিবর্তন করা হয়েছে!`;
+      triggerDebouncedSave();
+    }
+  }
+
+  // ===== INIT =====
+  window.addEventListener('DOMContentLoaded', async () => {
+    // Input field submit on enter
+    document.getElementById('inputModalField').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('inputModalSubmit').click();
+    });
+
+    document.querySelectorAll('[data-tooltip]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        if (this.disabled) return;
+        clearTimeout(this.hideTimeout);
+        this.classList.remove('hide-tooltip');
+        this.hideTimeout = setTimeout(() => this.classList.add('hide-tooltip'), 1200);
+      });
+      btn.addEventListener('mouseleave', function() { clearTimeout(this.hideTimeout); this.classList.remove('hide-tooltip'); this.blur(); });
+    });
+
+    // Restore settings
+    const t = localStorage.getItem('writer_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', t); updateThemeIcons(t);
+    setFontSize(localStorage.getItem('writer_font') || '17');
+    setLineHeight(localStorage.getItem('writer_lh') || '195');
+    const ff = localStorage.getItem('writer_fontfam') || "'Noto Serif Bengali', serif";
+    document.getElementById('fontSelect').value = ff; setFontFromDropdown(ff);
+
+    // Populate Splash Cross Platform Section
+    const splashCp = document.getElementById('splashCpSection');
+    const webUrl = 'https://mdmoshfequrrahman.github.io/likhon/';
+    const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.mushfiq.likhon';
+
+    if (splashCp) {
+      if (isAndroidApp) {
+        splashCp.innerHTML = `<div style="background:var(--surface2); padding:14px; border-radius:12px; border:1px solid var(--border); text-align:center;">
+          <p style="font-size:13px; color:var(--text-muted); margin-bottom:10px; font-family:'Hind Siliguri', sans-serif; font-weight:bold;">ব্রাউজার বা পিসিতে ব্যবহার করতে ভিজিট করুন</p>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input type="text" readonly value="${webUrl}" class="custom-input" style="flex:1; font-size:12px; padding:8px; text-align:center;">
+            <button class="generic-btn" onclick="copyToClipboard('${webUrl}')" style="padding:8px 12px; font-size:12px;">কপি</button>
+            <button class="generic-btn secondary" onclick="shareAppWebLink('${webUrl}')" style="padding:8px 12px; font-size:12px;">শেয়ার</button>
+          </div>
+        </div>`;
+      } else {
+        splashCp.innerHTML = `<div style="background:var(--surface2); padding:14px; border-radius:12px; border:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:10px;">
+          <div style="text-align:left;">
+            <p style="font-size:13px; color:var(--text-muted); font-family:'Hind Siliguri', sans-serif; margin-bottom:4px; font-weight:bold;">অ্যান্ড্রয়েড ফোনে ব্যবহার করুন</p>
+            <a href="${playStoreUrl}" target="_blank" style="color:var(--accent);font-size:14px;text-decoration:none;font-weight:bold;">🔗 Download App</a>
+          </div>
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=${encodeURIComponent(playStoreUrl)}" style="width:65px; height:65px; border-radius:8px; background:white; padding:4px;" alt="QR Code">
+        </div>`;
+      }
+    }
+
+    // Init DB
+    try {
+      await initDB();
+      novelsList = await dbGetAllNovels();
+    } catch (e) {
+      showToast('ডেটাবেজ শুরু করতে সমস্যা হয়েছে। পেজ রিলোড করুন।');
+      return;
+    }
+
+    // Init Logic
+    if (localStorage.getItem('likhon_setup_complete') === 'true') {
+      await renderDashboard();
+      pushHash('#dashboard');
+      showView('dashboard-view');
+      
+// Matrix: App/Browser Open Sync logic
+      if (getToken() && navigator.onLine) {
+        // Just call syncWithCloud. It will automatically check if the token is expired 
+        // and trigger silentTokenRefresh() securely in the background!
+        syncWithCloud(true, true).then(() => renderDashboard());
+      } else if (getToken() && !navigator.onLine && isTokenExpired()) {
+        // Only show offline expired status if they literally have no internet to refresh it
+        renderDashboardProfile();
+      }
+    } else {
+      showView('splash-view');
+    }
+  });
+
+</script>
+</body>
+</html>
