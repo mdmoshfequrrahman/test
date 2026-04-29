@@ -219,13 +219,17 @@
             updateSyncStatus('syncing');
 
             try {
-                // 1. Search for notes.json in appDataFolder
-                const searchRes = await fetch(`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name='notes.json'`, {
+                // 1. Search for notes.json in appDataFolder safely
+                const q = encodeURIComponent("name='notes.json'");
+                const searchRes = await fetch(`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=${q}`, {
                     headers: { 'Authorization': `Bearer ${accessToken}` }
                 });
                 
-                if (searchRes.status === 401) {
-                    throw new Error("Token expired");
+                if (!searchRes.ok) {
+                    const errData = await searchRes.json();
+                    console.error("Drive Search Error:", errData);
+                    if (searchRes.status === 401) throw new Error("Token expired");
+                    throw new Error("Failed to search Drive");
                 }
                 
                 const searchData = await searchRes.json();
@@ -270,46 +274,65 @@
         async function saveNotesToDrive() {
             updateSyncStatus('syncing');
 
-            const boundary = '-------314159265358979323846';
-            const delimiter = "\r\n--" + boundary + "\r\n";
-            const close_delim = "\r\n--" + boundary + "--";
-
-            const metadata = {
-                name: 'notes.json',
-                parents: ['appDataFolder']
-            };
-
-            const multipartRequestBody =
-                delimiter +
-                'Content-Type: application/json\r\n\r\n' +
-                JSON.stringify(metadata) +
-                delimiter +
-                'Content-Type: application/json\r\n\r\n' +
-                JSON.stringify(notesArray) +
-                close_delim;
-
-            const method = driveFileId ? 'PATCH' : 'POST';
-            const url = driveFileId 
-                ? `https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=multipart`
-                : `https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart`;
-
             try {
-                const res = await fetch(url, {
-                    method: method,
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': `multipart/related; boundary=${boundary}`
-                    },
-                    body: multipartRequestBody
-                });
+                if (driveFileId) {
+                    // Updating existing file: Simple media upload (bypass multipart constraints)
+                    const res = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`, {
+                        method: 'PATCH',
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(notesArray)
+                    });
 
-                if (!res.ok) throw new Error('Upload failed');
+                    if (!res.ok) {
+                        const err = await res.json();
+                        console.error('Drive API Error:', err);
+                        throw new Error('Update failed');
+                    }
+                    updateSyncStatus('synced');
+                } else {
+                    // Creating new file: Multipart required to apply appDataFolder metadata
+                    const boundary = '-------314159265358979323846';
+                    const delimiter = "--" + boundary + "\r\n";
+                    const close_delim = "--" + boundary + "--";
 
-                const data = await res.json();
-                if (!driveFileId && data.id) {
-                    driveFileId = data.id; // Save new file ID for future updates
+                    const metadata = {
+                        name: 'notes.json',
+                        parents: ['appDataFolder']
+                    };
+
+                    const multipartRequestBody =
+                        delimiter +
+                        'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
+                        JSON.stringify(metadata) + '\r\n' +
+                        delimiter +
+                        'Content-Type: application/json\r\n\r\n' +
+                        JSON.stringify(notesArray) + '\r\n' +
+                        close_delim;
+
+                    const res = await fetch(`https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`,
+                            'Content-Type': `multipart/related; boundary=${boundary}`
+                        },
+                        body: multipartRequestBody
+                    });
+
+                    if (!res.ok) {
+                        const err = await res.json();
+                        console.error('Drive API Error:', err);
+                        throw new Error('Create failed');
+                    }
+
+                    const data = await res.json();
+                    if (data.id) {
+                        driveFileId = data.id; // Save new file ID for future updates
+                    }
+                    updateSyncStatus('synced');
                 }
-                updateSyncStatus('synced');
             } catch (error) {
                 console.error('Save Error:', error);
                 updateSyncStatus('error');
