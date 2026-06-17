@@ -1,598 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Notes</title>
-    <!-- Tailwind CSS for Styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Identity Services -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background-color: #121212; color: #e0e0e0; padding: 20px; }
+    .container { width: 100%; margin: 0 auto; }
+    
+    /* Profile Header */
+    header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 20px; border-bottom: 1px solid #2d2d2d; }
+    .profile-card { display: flex; align-items: center; gap: 15px; background: #1e1e1e; padding: 10px 20px; border-radius: 50px; border: 1px solid #2d2d2d; }
+    .profile-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+    .profile-info { display: flex; flex-direction: column; }
+    .profile-name { font-weight: bold; color: #fff; }
+    .profile-role { font-size: 0.8rem; color: #00E676; text-transform: uppercase; }
 
-    <style>
-        /* Custom scrollbar for a polished look */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
-        .toast-enter { animation: slideIn 0.3s ease-out forwards; }
-        .toast-exit { animation: slideOut 0.3s ease-in forwards; }
-        
-        @keyframes slideIn {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-            from { transform: translateY(0); opacity: 1; }
-            to { transform: translateY(100%); opacity: 0; }
-        }
-    </style>
+    /* Nav & Tabs */
+    .nav-tabs { display: flex; gap: 15px; margin-top: 20px; }
+    .tab-btn { background: #1e1e1e; color: #a0a0a0; border: 1px solid #2d2d2d; padding: 10px 20px; cursor: pointer; border-radius: 4px; display: none; /* Hidden by default */ }
+    .tab-btn.active { background: #00E676; color: #121212; font-weight: bold; }
+    
+    /* Layouts */
+    .view-section { display: none; margin-top: 25px; }
+    .view-section.active { display: block; }
+    .card { background: #1e1e1e; border: 1px solid #2d2d2d; padding: 20px; border-radius: 6px; }
+    
+    /* Form Elements */
+    .form-group { margin-bottom: 20px; }
+    label { display: block; margin-bottom: 8px; color: #a0a0a0; font-size: 0.9rem; }
+    select, input { width: 100%; padding: 12px; background: #2d2d2d; border: 1px solid #3d3d3d; color: #fff; border-radius: 4px; font-size: 1rem; }
+    button.submit-btn { width: 100%; background: #00E676; color: #121212; padding: 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1rem; font-weight: bold; margin-top: 10px; }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col">
+<body>
 
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-10">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2 text-indigo-600">
-                <i data-lucide="cloud-lightning" class="w-6 h-6"></i>
-                <h1 class="text-xl font-bold tracking-tight">Cloud Notes</h1>
-            </div>
-            
-            <!-- Login/User Controls -->
-            <div id="auth-controls">
-                <button id="login-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-full font-medium transition-colors flex items-center gap-2 text-sm shadow-sm">
-                    <i data-lucide="log-in" class="w-4 h-4"></i>
-                    Sign in with Google
-                </button>
-                <div id="user-menu" class="hidden flex items-center gap-4">
-                    <button id="manual-sync-btn" class="text-gray-400 hover:text-indigo-600 p-2 rounded-full hover:bg-gray-100 transition-colors" title="Force Sync Now">
-                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                    </button>
-                    <span id="sync-status" class="text-xs text-gray-500 flex items-center gap-1">
-                        <i data-lucide="check-circle-2" class="w-3 h-3 text-green-500"></i> Synced
-                    </span>
-                    <button id="logout-btn" class="text-gray-500 hover:text-red-500 p-2 rounded-full hover:bg-gray-100 transition-colors" title="Sign Out">
-                        <i data-lucide="log-out" class="w-5 h-5"></i>
-                    </button>
-                </div>
-            </div>
+  <div class="container">
+    <header>
+      <h2>AKIJ LIGHT ENGINEERING</h2>
+      <div class="profile-card">
+        <img id="user-avatar" class="profile-img" src="" alt="Profile">
+        <div class="profile-info">
+          <span id="user-name" class="profile-name">Loading...</span>
+          <span id="user-role" class="profile-role">...</span>
         </div>
+      </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow max-w-5xl mx-auto w-full px-4 py-8">
-        
-        <!-- Welcome / Login Prompt Screen -->
-        <div id="welcome-screen" class="flex flex-col items-center justify-center py-20 text-center">
-            <div class="bg-indigo-100 p-4 rounded-full mb-6">
-                <i data-lucide="cloud" class="w-12 h-12 text-indigo-600"></i>
-            </div>
-            <h2 class="text-2xl font-bold mb-2">Your Notes, Everywhere.</h2>
-            <p class="text-gray-500 max-w-md mx-auto mb-8">Sign in with your Google Account to securely sync your notes across all your devices using your private Google Drive.</p>
-        </div>
+    <div class="nav-tabs">
+      <button class="tab-btn" id="nav-dashboard" onclick="switchView('view-dashboard', this)">Live Dashboard</button>
+      <button class="tab-btn" id="nav-data-entry" onclick="switchView('view-data-entry', this)">Data Entry</button>
+      <button class="tab-btn" id="nav-admin" onclick="switchView('view-admin', this)">Admin Config</button>
+    </div>
 
-        <!-- App UI (Hidden until logged in) -->
-        <div id="app-ui" class="hidden flex flex-col gap-8">
-            
-            <!-- Note Input Area -->
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 relative focus-within:ring-2 focus-within:ring-indigo-500 transition-all">
-                <textarea id="note-input" rows="3" placeholder="Take a note..." class="w-full resize-none outline-none text-gray-700 bg-transparent placeholder-gray-400 text-lg"></textarea>
-                <div class="flex justify-between items-center mt-2">
-                    <span class="text-xs text-gray-400" id="char-count">0 chars</span>
-                    <div class="flex gap-2">
-                        <button id="cancel-edit-btn" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-600 px-4 py-2 rounded-full font-medium transition-colors">
-                            Cancel
-                        </button>
-                        <button id="add-note-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-full font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                            Save Note
-                        </button>
-                    </div>
-                </div>
-            </div>
+    <div id="view-data-entry" class="view-section card">
+      <h3 style="margin-bottom: 20px;">Hourly Production Entry</h3>
+      <div class="form-group">
+        <label>Select Production Line</label>
+        <select id="input-line"></select>
+      </div>
+      <div class="form-group">
+        <label>Select Product Model</label>
+        <select id="input-product"></select>
+      </div>
+      <div class="form-group">
+        <label>Select Time Slot</label>
+        <select id="input-hour">
+          <option value="08:00 - 09:00">08:00 - 09:00</option>
+          <option value="09:00 - 10:00">09:00 - 10:00</option>
+          <option value="10:00 - 11:00">10:00 - 11:00</option>
+          <option value="11:00 - 12:00">11:00 - 12:00</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Actual Good Parts Produced</label>
+        <input type="number" id="input-output" placeholder="e.g., 480">
+      </div>
+      <button class="submit-btn" onclick="submitData()">Submit Hourly Data</button>
+      <div id="entry-status" style="margin-top: 15px; color: #00E676; text-align: center;"></div>
+    </div>
 
-            <!-- Loading Skeleton -->
-            <div id="loading-indicator" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                <div class="bg-white h-32 rounded-2xl animate-pulse"></div>
-                <div class="bg-white h-32 rounded-2xl animate-pulse"></div>
-                <div class="bg-white h-32 rounded-2xl animate-pulse"></div>
-            </div>
+    <div id="view-dashboard" class="view-section">
+      <div class="card" style="text-align: center; color: #a0a0a0;">
+        <h2>Dashboard Interface Loads Here</h2>
+        <p>This space will contain the symmetrical widgets mapping out line productivity.</p>
+      </div>
+    </div>
 
-            <!-- Notes Grid -->
-            <div id="notes-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 auto-rows-max">
-                <!-- Notes will be injected here -->
-            </div>
-            
-            <!-- Empty State -->
-            <div id="empty-state" class="hidden flex flex-col items-center justify-center py-12 text-gray-400">
-                <i data-lucide="book-open" class="w-12 h-12 mb-3 opacity-50"></i>
-                <p>No notes yet. Create your first one above!</p>
-            </div>
-        </div>
-    </main>
+    <div id="view-admin" class="view-section card">
+      <h2>Admin Configuration Panel</h2>
+      <p style="color: #a0a0a0; margin-top: 10px;">User roles, line mapping, and target configuration UI goes here.</p>
+    </div>
 
-    <!-- Toast Notification System -->
-    <div id="toast-container" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2"></div>
+  </div>
 
-    <script>
-        // Initialize Icons
-        lucide.createIcons();
+  <script>
+    window.onload = function() {
+      google.script.run.withSuccessHandler(initializeApp).getUserState();
+    };
 
-        // --- Configuration ---
-        const CLIENT_ID = '850598567251-in7nucq5j002cv7ocksqu5me58vp4b75.apps.googleusercontent.com';
-        const SCOPES = 'https://www.googleapis.com/auth/drive.appdata';
-        
-        // --- State ---
-        let accessToken = null;
-        let tokenClient = null;
-        let notesArray = [];
-        let driveFileId = null; // ID of notes.json in Drive
-        let syncTimeout = null;
-        let editingNoteId = null; // Tracks which note is currently being edited
-        let hasPendingChanges = localStorage.getItem('notes_pending_sync') === 'true'; // Track unsynced offline changes
+    function initializeApp(appState) {
+      var user = appState.user;
+      
+      // 1. Populate Profile Header
+      document.getElementById('user-name').innerText = user.name;
+      document.getElementById('user-role').innerText = user.role;
+      document.getElementById('user-avatar').src = user.photo;
+      
+      // 2. Role-Based UI Routing
+      // By default, buttons are hidden. We display them based on roles.
+      var navDash = document.getElementById('nav-dashboard');
+      var navEntry = document.getElementById('nav-data-entry');
+      var navAdmin = document.getElementById('nav-admin');
 
-        // --- DOM Elements ---
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const userMenu = document.getElementById('user-menu');
-        const welcomeScreen = document.getElementById('welcome-screen');
-        const appUi = document.getElementById('app-ui');
-        const noteInput = document.getElementById('note-input');
-        const addNoteBtn = document.getElementById('add-note-btn');
-        const cancelEditBtn = document.getElementById('cancel-edit-btn');
-        const notesGrid = document.getElementById('notes-grid');
-        const emptyState = document.getElementById('empty-state');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const syncStatus = document.getElementById('sync-status');
-        const charCount = document.getElementById('char-count');
-        const manualSyncBtn = document.getElementById('manual-sync-btn');
+      if (user.role === "Super Admin" || user.role === "Admin") {
+        navDash.style.display = "block";
+        navEntry.style.display = "block";
+        navAdmin.style.display = "block";
+        switchView('view-admin', navAdmin); // Admins land on Admin panel
+      } 
+      else if (user.role === "Data Entry") {
+        navEntry.style.display = "block";
+        // Optionally allow supervisors to see the dashboard for their lines
+        navDash.style.display = "block"; 
+        switchView('view-data-entry', navEntry); // Supervisors land on data entry
+      } 
+      else { // Viewer
+        navDash.style.display = "block";
+        switchView('view-dashboard', navDash); // Viewers land on dashboard
+      }
 
-        // --- Network Event Listeners ---
-        window.addEventListener('online', () => {
-            if (accessToken) {
-                if (hasPendingChanges) {
-                    saveNotesToDrive();
-                } else {
-                    fetchNotesFromDrive();
-                }
-            } else if (notesArray.length > 0) {
-                updateSyncStatus('synced'); // Just clear the offline error if unauthenticated
-            }
-        });
+      // 3. Populate Data Entry Dropdowns securely based on permissions
+      populateDropdowns(appState);
+    }
 
-        window.addEventListener('offline', () => {
-            updateSyncStatus('offline');
-            if (accessToken) {
-                showToast('You are offline. Notes will be saved locally.', 'info');
-            }
-        });
+    function populateDropdowns(appState) {
+      // Logic to parse appState.linesConfig and appState.productsConfig
+      // and append <option> tags to document.getElementById('input-line') 
+      // ensuring we only show lines the user is authorized for based on appState.user.lines
+    }
 
-        // --- Initialization ---
-        window.onload = function() {
-            // Load local backup instantly if available
-            const localBackup = localStorage.getItem('cloud_notes_backup');
-            if (localBackup) {
-                try {
-                    notesArray = JSON.parse(localBackup);
-                    renderNotes();
-                } catch(e) {}
-            }
+    function switchView(viewId, btnElement) {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(viewId).classList.add('active');
+      btnElement.classList.add('active');
+    }
 
-            // Initialize Google Identity Services
-            tokenClient = google.accounts.oauth2.initTokenClient({
-                client_id: CLIENT_ID,
-                scope: SCOPES,
-                callback: handleCredentialResponse
-            });
+    function submitData() {
+      var line = document.getElementById('input-line').value;
+      var product = document.getElementById('input-product').value;
+      var hour = document.getElementById('input-hour').value;
+      var output = document.getElementById('input-output').value;
 
-            // Try to restore session silently if token exists in sessionStorage
-            const savedToken = sessionStorage.getItem('gdrive_token');
-            if (savedToken) {
-                accessToken = savedToken;
-                showAppUI();
-                fetchNotesFromDrive();
-            }
-        };
-
-        // --- Authentication ---
-        loginBtn.addEventListener('click', () => {
-            tokenClient.requestAccessToken({ prompt: 'consent' });
-        });
-
-        logoutBtn.addEventListener('click', () => {
-            if (accessToken) {
-                google.accounts.oauth2.revoke(accessToken, () => {
-                    console.log('Access token revoked');
-                });
-            }
-            sessionStorage.removeItem('gdrive_token');
-            accessToken = null;
-            notesArray = [];
-            driveFileId = null;
-            editingNoteId = null;
-            hasPendingChanges = false;
-            localStorage.removeItem('cloud_notes_backup'); // Clear local data on explicit logout
-            localStorage.removeItem('notes_pending_sync');
-            
-            hideAppUI();
-            showToast('Logged out successfully', 'success');
-        });
-
-        function handleCredentialResponse(response) {
-            if (response.access_token) {
-                accessToken = response.access_token;
-                sessionStorage.setItem('gdrive_token', accessToken);
-                showAppUI();
-                fetchNotesFromDrive();
-                showToast('Successfully logged in', 'success');
-            }
-        }
-
-        // --- UI Flow ---
-        function showAppUI() {
-            loginBtn.classList.add('hidden');
-            welcomeScreen.classList.add('hidden');
-            userMenu.classList.remove('hidden');
-            appUi.classList.remove('hidden');
-            
-            if (!navigator.onLine) {
-                updateSyncStatus('offline');
-            }
-        }
-
-        function hideAppUI() {
-            loginBtn.classList.remove('hidden');
-            welcomeScreen.classList.remove('hidden');
-            userMenu.classList.add('hidden');
-            appUi.classList.add('hidden');
-            cancelEdit();
-        }
-
-        function updateSyncStatus(status) {
-            if (status === 'syncing') {
-                syncStatus.innerHTML = `<i data-lucide="refresh-cw" class="w-3 h-3 text-blue-500 animate-spin"></i> Syncing...`;
-                manualSyncBtn.disabled = true;
-                manualSyncBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            } else if (status === 'synced') {
-                syncStatus.innerHTML = `<i data-lucide="check-circle-2" class="w-3 h-3 text-green-500"></i> Synced`;
-                manualSyncBtn.disabled = false;
-                manualSyncBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            } else if (status === 'offline') {
-                syncStatus.innerHTML = `<i data-lucide="wifi-off" class="w-3 h-3 text-gray-400"></i> Offline Backup`;
-                manualSyncBtn.disabled = true;
-                manualSyncBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            } else if (status === 'error') {
-                syncStatus.innerHTML = `<i data-lucide="alert-circle" class="w-3 h-3 text-red-500"></i> Sync Error`;
-                manualSyncBtn.disabled = false;
-                manualSyncBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-            lucide.createIcons();
-        }
-
-        // --- Drive API Interactions (Using native fetch) ---
-        
-        manualSyncBtn.addEventListener('click', fetchNotesFromDrive);
-
-        function saveToLocal() {
-            localStorage.setItem('cloud_notes_backup', JSON.stringify(notesArray));
-        }
-
-        async function fetchNotesFromDrive() {
-            if (!navigator.onLine) {
-                updateSyncStatus('offline');
-                return;
-            }
-
-            // If we have unsynced local changes, push them to the cloud instead of overwriting local data
-            if (hasPendingChanges) {
-                await saveNotesToDrive();
-                return;
-            }
-
-            loadingIndicator.classList.remove('hidden');
-            notesGrid.innerHTML = '';
-            emptyState.classList.add('hidden');
-            updateSyncStatus('syncing');
-
-            try {
-                // 1. Search for notes.json in appDataFolder safely
-                const q = encodeURIComponent("name='notes.json'");
-                const searchRes = await fetch(`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=${q}`, {
-                    headers: { 'Authorization': `Bearer ${accessToken}` }
-                });
-                
-                if (!searchRes.ok) {
-                    const errData = await searchRes.json();
-                    console.error("Drive Search Error:", errData);
-                    if (searchRes.status === 401) throw new Error("Token expired");
-                    throw new Error("Failed to search Drive");
-                }
-                
-                const searchData = await searchRes.json();
-
-                if (searchData.files && searchData.files.length > 0) {
-                    driveFileId = searchData.files[0].id;
-                    
-                    // 2. Download the file content
-                    const fileRes = await fetch(`https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`, {
-                        headers: { 'Authorization': `Bearer ${accessToken}` }
-                    });
-                    
-                    const textContent = await fileRes.text();
-                    try {
-                        notesArray = textContent ? JSON.parse(textContent) : [];
-                    } catch(e) {
-                        notesArray = []; // Handle corrupted JSON gracefully
-                    }
-                } else {
-                    // File doesn't exist yet
-                    notesArray = [];
-                    driveFileId = null;
-                }
-                
-                saveToLocal(); // Update our local offline backup with the fresh cloud data
-                renderNotes();
-                updateSyncStatus('synced');
-                showToast('Notes synced', 'success');
-
-            } catch (error) {
-                console.error("Fetch Error:", error);
-                if (error.message === "Token expired") {
-                    logoutBtn.click();
-                    showToast('Session expired. Please log in again.', 'error');
-                } else {
-                    updateSyncStatus('error');
-                    showToast('Failed to load notes from Drive.', 'error');
-                    // Fallback to local rendering if fetch fails
-                    renderNotes();
-                }
-            } finally {
-                loadingIndicator.classList.add('hidden');
-            }
-        }
-
-        async function saveNotesToDrive() {
-            if (!navigator.onLine) {
-                updateSyncStatus('offline');
-                return;
-            }
-
-            updateSyncStatus('syncing');
-
-            try {
-                if (driveFileId) {
-                    // Updating existing file: Simple media upload (bypass multipart constraints)
-                    const res = await fetch(`https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(notesArray)
-                    });
-
-                    if (!res.ok) {
-                        const err = await res.json();
-                        console.error('Drive API Error:', err);
-                        throw new Error('Update failed');
-                    }
-                } else {
-                    // Creating new file: Multipart required to apply appDataFolder metadata
-                    const boundary = '-------314159265358979323846';
-                    const delimiter = "--" + boundary + "\r\n";
-                    const close_delim = "--" + boundary + "--";
-
-                    const metadata = {
-                        name: 'notes.json',
-                        parents: ['appDataFolder']
-                    };
-
-                    const multipartRequestBody =
-                        delimiter +
-                        'Content-Type: application/json; charset=UTF-8\r\n\r\n' +
-                        JSON.stringify(metadata) + '\r\n' +
-                        delimiter +
-                        'Content-Type: application/json\r\n\r\n' +
-                        JSON.stringify(notesArray) + '\r\n' +
-                        close_delim;
-
-                    const res = await fetch(`https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                            'Content-Type': `multipart/related; boundary=${boundary}`
-                        },
-                        body: multipartRequestBody
-                    });
-
-                    if (!res.ok) {
-                        const err = await res.json();
-                        console.error('Drive API Error:', err);
-                        throw new Error('Create failed');
-                    }
-
-                    const data = await res.json();
-                    if (data.id) {
-                        driveFileId = data.id; // Save new file ID for future updates
-                    }
-                }
-
-                // Upload successful
-                hasPendingChanges = false;
-                localStorage.setItem('notes_pending_sync', 'false');
-                updateSyncStatus('synced');
-
-            } catch (error) {
-                console.error('Save Error:', error);
-                updateSyncStatus('error');
-                showToast('Failed to save to Drive', 'error');
-            }
-        }
-
-        // --- Note Management ---
-        
-        function debounceSave() {
-            // Immediately save to local offline backup
-            hasPendingChanges = true;
-            localStorage.setItem('notes_pending_sync', 'true');
-            saveToLocal();
-
-            if (!navigator.onLine) {
-                updateSyncStatus('offline');
-                return;
-            }
-
-            clearTimeout(syncTimeout);
-            updateSyncStatus('syncing');
-            // Wait 1 second after last interaction before uploading to avoid API spam
-            syncTimeout = setTimeout(() => {
-                saveNotesToDrive();
-            }, 1000);
-        }
-
-        noteInput.addEventListener('input', () => {
-            charCount.textContent = `${noteInput.value.length} chars`;
-            addNoteBtn.disabled = noteInput.value.trim().length === 0;
-        });
-
-        function cancelEdit() {
-            editingNoteId = null;
-            noteInput.value = '';
-            noteInput.dispatchEvent(new Event('input'));
-            addNoteBtn.textContent = 'Save Note';
-            cancelEditBtn.classList.add('hidden');
-        }
-
-        cancelEditBtn.addEventListener('click', cancelEdit);
-
-        addNoteBtn.addEventListener('click', () => {
-            const text = noteInput.value.trim();
-            if (!text) return;
-
-            if (editingNoteId) {
-                // Update existing note
-                const noteIndex = notesArray.findIndex(n => n.id === editingNoteId);
-                if (noteIndex !== -1) {
-                    notesArray[noteIndex].text = text;
-                    notesArray[noteIndex].timestamp = Date.now(); // Update timestamp to now
-                    
-                    // Move the edited note to the top of the list
-                    const updatedNote = notesArray.splice(noteIndex, 1)[0];
-                    notesArray.unshift(updatedNote);
-                }
-                cancelEdit();
-                showToast('Note updated', 'success');
-            } else {
-                // Create new note
-                const newNote = {
-                    id: crypto.randomUUID(),
-                    text: text,
-                    timestamp: Date.now()
-                };
-                notesArray.unshift(newNote); // Add to beginning
-                noteInput.value = '';
-                noteInput.dispatchEvent(new Event('input')); // reset counter/button
-            }
-            
-            renderNotes();
-            debounceSave();
-        });
-
-        function editNote(id) {
-            const note = notesArray.find(n => n.id === id);
-            if (!note) return;
-
-            editingNoteId = id;
-            noteInput.value = note.text;
-            noteInput.dispatchEvent(new Event('input'));
-            
-            addNoteBtn.textContent = 'Update Note';
-            cancelEditBtn.classList.remove('hidden');
-            
-            // Scroll to the input area so the user knows where to type
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            noteInput.focus();
-        }
-
-        function deleteNote(id) {
-            notesArray = notesArray.filter(note => note.id !== id);
-            
-            // If they delete the note they are currently editing, cancel the edit mode
-            if (editingNoteId === id) {
-                cancelEdit();
-            }
-            
-            renderNotes();
-            debounceSave();
-        }
-
-        function renderNotes() {
-            notesGrid.innerHTML = '';
-            
-            if (notesArray.length === 0) {
-                emptyState.classList.remove('hidden');
-                return;
-            }
-            
-            emptyState.classList.add('hidden');
-
-            notesArray.forEach(note => {
-                const date = new Date(note.timestamp);
-                const formattedDate = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-                
-                const noteEl = document.createElement('div');
-                noteEl.className = 'bg-white p-5 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative group flex flex-col justify-between';
-                
-                // Highlight the note currently being edited
-                if (editingNoteId === note.id) {
-                    noteEl.classList.add('ring-2', 'ring-indigo-500');
-                }
-                
-                // Format text: escape HTML and replace newlines with <br>
-                const safeText = note.text.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
-
-                noteEl.innerHTML = `
-                    <div class="text-gray-800 text-[15px] leading-relaxed mb-4 whitespace-pre-wrap break-words">${safeText}</div>
-                    <div class="flex justify-between items-center mt-auto pt-3 border-t border-gray-50">
-                        <span class="text-xs text-gray-400 font-medium">${formattedDate}</span>
-                        <div class="flex gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
-                            <button onclick="editNote('${note.id}')" class="text-gray-400 hover:text-indigo-500 transition-colors p-1 rounded" aria-label="Edit note">
-                                <i data-lucide="edit-2" class="w-4 h-4"></i>
-                            </button>
-                            <button onclick="deleteNote('${note.id}')" class="text-gray-400 hover:text-red-500 transition-colors p-1 rounded" aria-label="Delete note">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-                notesGrid.appendChild(noteEl);
-            });
-            lucide.createIcons();
-        }
-
-        // --- Custom UI Toast Notifications ---
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            const bgColor = type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-gray-800';
-            
-            toast.className = `${bgColor} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 text-sm font-medium toast-enter max-w-xs`;
-            
-            const icon = type === 'error' ? 'alert-circle' : type === 'success' ? 'check-circle' : 'info';
-            toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i> ${message}`;
-            
-            document.getElementById('toast-container').appendChild(toast);
-            lucide.createIcons();
-
-            setTimeout(() => {
-                toast.classList.replace('toast-enter', 'toast-exit');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        // Initialize button state
-        noteInput.dispatchEvent(new Event('input'));
-    </script>
+      if(!output) { alert("Please enter production numbers"); return; }
+      
+      document.getElementById('entry-status').innerText = "Saving to database...";
+      
+      google.script.run
+        .withSuccessHandler(function(res) {
+           document.getElementById('entry-status').innerText = res;
+           document.getElementById('input-output').value = ''; // Reset input
+        })
+        .withFailureHandler(function(err) {
+           document.getElementById('entry-status').style.color = "#FF1744";
+           document.getElementById('entry-status').innerText = err.message;
+        })
+        .submitProductionData(line, product, hour, output);
+    }
+  </script>
 </body>
 </html>
