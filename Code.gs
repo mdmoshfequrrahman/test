@@ -25,7 +25,7 @@ function getUserState() {
   var access = { email: userEmail, name: userName, photo: userPhoto, role: "Viewer", lines: "ALL" };
   
   // Tier 1: Hardcoded Super Admin
-  var superAdminEmail = "md.moshfequr@akijlight.com"; // Change to your email
+  var superAdminEmail = "head.plant@akijlighengineering.com"; // Change to your email
   if (userEmail === superAdminEmail) {
     access.role = "Super Admin";
     access.lines = "ALL";
